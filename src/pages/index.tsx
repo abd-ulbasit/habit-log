@@ -3,7 +3,10 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
+import { useRouter } from "next/router";
+import { ModeToggle } from "~/components/ui/modeToggler";
 export default function Home() {
+  const router = useRouter();
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const { status } = useSession();
 
@@ -14,14 +17,14 @@ export default function Home() {
         <meta name="description" content="It's a habit builder/Tracker.It's inspired by the green github contribution graph." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#cab3eb] to-[#71afa7]">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1>
             {hello.data ? `${hello.data.greeting}` : "Loading..."}
           </h1>
           <p>{status == "authenticated" ? "Welcome beloved User" : "You are gay"}</p>
-          <Link href="/login">Go to Login</Link>
-          <Button>Hll</Button>
+          <ModeToggle></ModeToggle>
+          <Button onClick={() => void router.push("login").then().catch()} >Go to Login Page</Button>
         </div>
       </main>
     </>
