@@ -24,7 +24,7 @@ export default function Home() {
           </h1>
           <p>{status == "authenticated" ? "Welcome beloved User" : "You are gay"}</p>
           <ModeToggle></ModeToggle>
-          <Button onClick={() => void router.push("login").then().catch()} >Go to Login Page</Button>
+          <Button onClick={() => void router.push("/login").then().catch()} >Go to Login Page</Button>
         </div>
       </main>
     </>
