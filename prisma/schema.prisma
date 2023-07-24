@@ -74,4 +74,6 @@ model Tracking {
     date      DateTime
     habitId   String
     habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+    @@index([habitId, id])
 }
