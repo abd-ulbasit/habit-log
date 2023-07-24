@@ -1,18 +1,10 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import Link from "next/link";
-import { Button } from "~/components/ui/button";
-import { useRouter } from "next/router";
-import { ModeToggle } from "~/components/ui/modeToggler";
 import type { NextPageWithLayout } from "./_app";
 import type { ReactNode } from "react";
 import MainLayout from "~/components/mainLayout";
 const Home: NextPageWithLayout = () => {
-  const router = useRouter();
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  const { status } = useSession();
-
   return (
     <>
       <Head>
@@ -25,9 +17,6 @@ const Home: NextPageWithLayout = () => {
           <h1>
             {hello.data ? `${hello.data.greeting}` : "Loading..."}
           </h1>
-          <p>{status == "authenticated" ? "Welcome beloved User" : "You are gay"}</p>
-          <ModeToggle></ModeToggle>
-          <Button onClick={() => void router.push("/login").then().catch()} >Go to Login Page</Button>
         </div>
       </main>
     </>
