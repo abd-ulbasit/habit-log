@@ -5,7 +5,10 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/router";
 import { ModeToggle } from "~/components/ui/modeToggler";
-export default function Home() {
+import type { NextPageWithLayout } from "./_app";
+import type { ReactNode } from "react";
+import MainLayout from "~/components/mainLayout";
+const Home: NextPageWithLayout = () => {
   const router = useRouter();
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const { status } = useSession();
@@ -30,4 +33,11 @@ export default function Home() {
     </>
   );
 }
-
+Home.getLayout = function getLayout(page: ReactNode): ReactNode {
+  return (
+    <MainLayout>
+      {page}
+    </MainLayout>
+  )
+}
+export default Home;
