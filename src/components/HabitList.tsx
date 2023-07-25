@@ -2,9 +2,15 @@ import { api } from "~/utils/api"
 import { Checkbox } from "./ui/checkbox";
 import { isDateToday } from "~/lib/utils"
 import { useEffect } from "react";
+import { Trash, Trash2 } from "lucide-react";
 
 const HabitList = () => {
     const trpcCtx = api.useContext()
+    const deleteHabit = api.habit.deleteHabit.useMutation({
+        onSuccess: async () => {
+            await trpcCtx.habit.getall.invalidate()
+        }
+    })
     const habits = api.habit.getall.useQuery();
     const createTracking = api.habit.createTrcking.useMutation({
         onSuccess: async () => {
@@ -31,6 +37,11 @@ const HabitList = () => {
         // console.log(trackingId, );
         updatetracking.mutate({ id: trackingId })
     }
+    const handleDeleteHabit = (id: string) => {
+        deleteHabit.mutate({
+            id
+        })
+    }
     return (
         <div className="list-disc ">
             {
@@ -44,6 +55,9 @@ const HabitList = () => {
                     return <li key={habit.id} className="flex items-center gap-2">
                         <Checkbox className="inline" onClick={() => handleMarkComplete(todayTracking.id)} checked={todayTracking.completed} disabled={updatetracking.status == "loading"} />
                         <p className="inline">{habit.name}</p>
+                        <button onClick={() => { handleDeleteHabit(habit.id) }} disabled={deleteHabit.isLoading}>
+                            <Trash2 />
+                        </button>
                     </li>
                 }) : null
             }

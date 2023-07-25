@@ -19,8 +19,8 @@ const Home: NextPageWithLayout = () => {
           <h1>
             {hello.data ? `${hello.data.greeting}` : "Loading..."}
           </h1>
-          <HabitList />
           <CreateHabit />
+          <HabitList />
         </div>
       </main>
     </>
