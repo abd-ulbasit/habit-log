@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { api } from "~/utils/api";
 import { areDatesSame } from "~/lib/utils";
@@ -6,7 +6,7 @@ import { areDatesSame } from "~/lib/utils";
 function getColor(count: number, highestCount: number, color: string): string {
     const x = count / highestCount;
     if (x == 0) {
-        return "bg-white"
+        return `border bg-${color}-50`
     }
     else if (x <= .2) {
         return `bg-${color}-300`
@@ -22,6 +22,7 @@ function getColor(count: number, highestCount: number, color: string): string {
 }
 
 const LastYearProgress = () => {
+    const scrollableref = useRef<HTMLDivElement>(null)
     const gethabit = api.habit.getall.useQuery();
     if (gethabit.isFetching) {
         <div>Loading</div>
@@ -56,11 +57,17 @@ const LastYearProgress = () => {
         }
 
         setDates(pastYearDates);
+
     }, [])
+    useEffect(() => {
+        if (scrollableref.current) {
+            const scrollableElement = scrollableref.current;
+            scrollableElement.scrollLeft = scrollableElement.scrollHeight + 30
+        }
+    }, [scrollableref.current])
     return (
         <TooltipProvider >
-            < div className="grid grid-rows-7 grid-flow-col gap-1">
-
+            < div className="grid grid-rows-7 grid-flow-col gap-1 w-full lg:w-auto overflow-scroll pb-4" ref={scrollableref}>
                 {dates.map((date) => {
                     const dayTraking = allTracking?.filter((t) => areDatesSame(date, t.date));
                     const count = dayTraking?.filter(t => t.completed == true).length ?? 0
