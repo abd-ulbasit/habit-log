@@ -37,13 +37,36 @@ export const habitRouter = createTRPCRouter({
       },
     });
   }),
-  createOrUpdateTracking: protectedProcedure
+  createTrcking: protectedProcedure
+    .input(z.object({ habitId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.prisma.tracking.create({
+        data: {
+          habitId: input.habitId,
+          date: new Date(),
+        },
+      });
+    }),
+  UpdateTracking: protectedProcedure
     .input(
       z.object({
-        habitId: z.string(),
+        id: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       // const tracking = await ctx.prisma.tracking.findUnique();
+      const tracking = await ctx.prisma.tracking.findUnique({
+        where: { id: input.id },
+      });
+      if (!tracking) return;
+      return await ctx.prisma.tracking.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          completed: !tracking.completed,
+          date: new Date(),
+        },
+      });
     }),
 });
