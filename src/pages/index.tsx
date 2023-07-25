@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import MainLayout from "~/components/mainLayout";
 import CreateHabit from "~/components/CreateHabit";
 import HabitList from "~/components/HabitList";
+import LastYearProgress from "~/components/LastYearProgress";
 const Home: NextPageWithLayout = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   return (
@@ -21,6 +22,7 @@ const Home: NextPageWithLayout = () => {
           </h1>
           <CreateHabit />
           <HabitList />
+          <LastYearProgress></LastYearProgress>
         </div>
       </main>
     </>
