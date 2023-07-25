@@ -2,6 +2,24 @@ import { useEffect, useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { api } from "~/utils/api";
 import { areDatesSame } from "~/lib/utils";
+// import { Tracking } from "@prisma/client";
+function getColor(count: number, highestCount: number, color: string): string {
+    const x = count / highestCount;
+    if (x == 0) {
+        return "bg-white"
+    }
+    else if (x <= .2) {
+        return `bg-${color}-300`
+    } else if (x <= .4) {
+        return `bg-${color}-400`
+    } else if (x <= .6) {
+        return `bg-${color}-500`
+    } else if (x <= 0.8) {
+        return `bg-${color}-600`
+    } else {
+        return `bg-${color}-700`
+    }
+}
 
 const LastYearProgress = () => {
     const gethabit = api.habit.getall.useQuery();
@@ -9,7 +27,21 @@ const LastYearProgress = () => {
         <div>Loading</div>
     }
     const allTracking = gethabit.data?.flatMap((habit) => habit.Completed)
-    console.log({ allTracking });
+    const completedCountByDay = new Map<string, number>();
+
+    // Use forEach() to count the completed items for each day
+    if (allTracking) {
+
+        allTracking.forEach((tracking) => {
+            const { date, completed } = tracking;
+            if (completed) {
+                const completedCount = completedCountByDay.get(date.toDateString()) ?? 0;
+                completedCountByDay.set(date.toDateString(), completedCount + 1);
+            }
+        });
+    }
+
+    const highestCount = Math.max(...completedCountByDay.values())
 
     const [dates, setDates] = useState<Date[]>([])
     useEffect(() => {
@@ -31,9 +63,9 @@ const LastYearProgress = () => {
 
                 {dates.map((date) => {
                     const dayTraking = allTracking?.filter((t) => areDatesSame(date, t.date));
-                    const count = dayTraking?.length
+                    const count = dayTraking?.filter(t => t.completed == true).length ?? 0
                     return <Tooltip key={date.toISOString()} >
-                        <TooltipTrigger className={`w-3 h-3 rounded-sm bg-green-200`}></TooltipTrigger>
+                        <TooltipTrigger className={`w-3 h-3 rounded-sm  ${getColor(count, highestCount, "green")} `}></TooltipTrigger>
                         <TooltipContent className="">{`${date.toDateString()} - ${count} commits`}</TooltipContent>
                     </Tooltip>
                 })
