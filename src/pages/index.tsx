@@ -3,6 +3,8 @@ import { api } from "~/utils/api";
 import type { NextPageWithLayout } from "./_app";
 import type { ReactNode } from "react";
 import MainLayout from "~/components/mainLayout";
+import CreateHabit from "~/components/CreateHabit";
+import HabitList from "~/components/HabitList";
 const Home: NextPageWithLayout = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   return (
@@ -17,6 +19,8 @@ const Home: NextPageWithLayout = () => {
           <h1>
             {hello.data ? `${hello.data.greeting}` : "Loading..."}
           </h1>
+          <HabitList />
+          <CreateHabit />
         </div>
       </main>
     </>
