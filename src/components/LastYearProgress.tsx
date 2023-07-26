@@ -1,8 +1,17 @@
 import { useEffect, useRef, useState } from "react";
+import { Button } from "./ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "./ui/dropdown-menu"
+import type { Habit as HABIT, Tracking } from "@prisma/client";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { api } from "~/utils/api";
 import { areDatesSame } from "~/lib/utils";
-// import { Tracking } from "@prisma/client";
 function getColor(count: number, highestCount: number, _color: string): string {
     const x = count / highestCount;
     if (x == 0) {
@@ -20,14 +29,27 @@ function getColor(count: number, highestCount: number, _color: string): string {
         return `bg-green-700`
     }
 }
-
+// interface Tracking extends Completed { }
+interface habit extends HABIT {
+    Completed: Tracking[]
+}
 const LastYearProgress = () => {
+    const [habits, setHabits] = useState<habit[]>([])
+    const [habitNames, setHabitNames] = useState<string[]>();
     const scrollableref = useRef<HTMLDivElement>(null)
     const gethabit = api.habit.getall.useQuery();
     if (gethabit.isFetching) {
         <div>Loading</div>
     }
-    const allTracking = gethabit.data?.flatMap((habit) => habit.Completed)
+    useEffect(() => {
+        setHabits(() => {
+            return gethabit?.data ? gethabit.data : []
+        })
+    }, [gethabit.data])
+    useEffect(() => {
+        setHabits(gethabit.data ? gethabit.data.filter((habit) => habitNames?.includes(habit.name)) as habit[] : [])
+    }, [habitNames])
+    const allTracking = habits?.flatMap((habit) => habit.Completed)
     const completedCountByDay = new Map<string, number>();
 
     // Use forEach() to count the completed items for each day
@@ -78,6 +100,35 @@ const LastYearProgress = () => {
                 })
                 }
             </div>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline">Filter</Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Show Graph of:</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {gethabit.data?.map((habit) => {
+                        return (
+
+                            <DropdownMenuCheckboxItem
+                                checked={habitNames?.includes(habit.name)}
+                                onCheckedChange={() => {
+                                    console.log("flipped");
+                                    if (habitNames?.includes(habit.name)) {
+                                        setHabitNames((prev) => { return prev?.filter((x) => { return x != habit.name }) })
+                                    }
+                                    else {
+                                        setHabitNames((prev) => { return [...(prev ? prev : []), habit.name] as string[] })
+                                    }
+                                }}
+                                key={habit.id}
+                            >{habit.name}
+                            </DropdownMenuCheckboxItem>
+                        )
+                    })
+                    }
+                </DropdownMenuContent>
+            </DropdownMenu>
         </TooltipProvider >
     );
 
