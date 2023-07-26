@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
+import { api } from '~/utils/api';
 // import axios from 'axios';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -12,6 +13,7 @@ enum SessionType {
 }
 
 const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
+    const addpomodoro = api.habit.addPomodoroSession.useMutation();
     const initialTime = 30;
     const [isRunning, setIsRunning] = useState(false);
     const [sessionType, setSessionType] = useState<SessionType>(SessionType.WORK); // Work session or break
@@ -49,6 +51,8 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
     const handleCycleComplete = () => {
         setIsRunning(false);
         if (sessionType == SessionType.WORK) {
+            console.log("add to db");
+            addpomodoro.mutate()
             //Store Session in db if logged in !
         }
         // Send a request to the backend to mark the cycle as completed in the database
