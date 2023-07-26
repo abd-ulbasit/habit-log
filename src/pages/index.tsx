@@ -24,7 +24,7 @@ const Home: NextPageWithLayout = () => {
     // Update the positions of all items to their initial positions
     setInitialPositions([]);
   };
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
   return (
     <>
       <Head>
@@ -34,9 +34,9 @@ const Home: NextPageWithLayout = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 relative">
-          <h1>
+          {/* <h1>
             {hello.data ? `${hello.data.greeting}` : "Loading..."}
-          </h1>
+          </h1> */}
           <Button onClick={resetPositions} disabled={initialPositions.length === 0}>
             Reset All
           </Button>
@@ -50,7 +50,11 @@ const Home: NextPageWithLayout = () => {
               <HabitList />
             </div>
           </Draggable>
-          <Pomodoro initialTime={20}></Pomodoro>
+          <Draggable resetPositions={resetPositions} initialPosition={initialPositions[2] ?? { x: 0, y: 0 }}>
+            <div onMouseDown={(e) => saveInitialPosition(2, e.clientX, e.clientY)} >
+              <Pomodoro initialTime={1300}></Pomodoro>
+            </div>
+          </Draggable>
           <LastYearProgress></LastYearProgress>
         </div >
       </main >

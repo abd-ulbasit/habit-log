@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Button } from './ui/button';
 // import axios from 'axios';
 
 interface PomodoroProps {
@@ -46,7 +47,7 @@ const Pomodoro: React.FC<PomodoroProps> = ({ initialTime }) => {
     const handleCycleComplete = () => {
         setIsRunning(false);
         if (sessionType == SessionType.WORK) {
-            //Store Session in db
+            //Store Session in db if logged in !
         }
         // Send a request to the backend to mark the cycle as completed in the database
         // const cycleType = sessionType ? 'work' : 'break';
@@ -63,15 +64,18 @@ const Pomodoro: React.FC<PomodoroProps> = ({ initialTime }) => {
     };
 
     return (
-        <div>
-            <div>{sessionType == SessionType.Break ? "Break" : "Work"}</div>
-            <div>{`${Math.floor(timeRemaining / 60)}:${('0' + (timeRemaining % 60)).slice(-2)}`}</div>
-            {isRunning ? (
-                <button onClick={handlePause}>Pause</button>
-            ) : (
-                <button onClick={handleStart}>Start</button>
-            )}
-            <button onClick={handleReset}>Reset</button>
+        <div className='p-8 flex flex-col gap-4 border rounded-3xl shadow-lg scale-110'>
+            <p className='text-center uppercase '>{sessionType == SessionType.Break ? "Break" : "Work"}</p>
+            <p className='text-9xl font-extrabold text-center'>{`${Math.floor(timeRemaining / 60)}:${('0' + (timeRemaining % 60)).slice(-2)}`}</p>
+            <div className='self-center scale-125 gap-2   '>
+
+                {isRunning ? (
+                    <Button onClick={handlePause}>Pause</Button>
+                ) : (
+                    <Button onClick={handleStart}>Start</Button>
+                )}
+                <Button onClick={handleReset} variant={'ghost'}>Reset</Button>
+            </div>
         </div>
     );
 };
