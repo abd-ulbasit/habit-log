@@ -78,4 +78,27 @@ export const habitRouter = createTRPCRouter({
         },
       });
     }),
+  addPomodoroSession: protectedProcedure.mutation(async ({ ctx }) => {
+    let pomodoro = await ctx.prisma.habit.findFirst({
+      where: {
+        userId: ctx.session.user.id,
+        name: "POMODORO",
+      },
+    });
+    if (!pomodoro) {
+      pomodoro = await ctx.prisma.habit.create({
+        data: {
+          name: "POMODORO",
+          userId: ctx.session.user.id,
+        },
+      });
+    }
+    return await ctx.prisma.tracking.create({
+      data: {
+        date: new Date(),
+        habitId: pomodoro.id,
+        completed: true,
+      },
+    });
+  }),
 });

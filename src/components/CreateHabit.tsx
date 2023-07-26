@@ -16,7 +16,7 @@ export default function CreateHabit() {
         }
     });
     const inputref = useRef<HTMLInputElement>(null);
-    inputref.current?.focus();
+    // inputref.current?.focus();
     const handleCreateHabit = (e: FormEvent<HTMLFormElement>) => {
 
         e.preventDefault()

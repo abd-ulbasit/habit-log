@@ -3,7 +3,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/t
 import { api } from "~/utils/api";
 import { areDatesSame } from "~/lib/utils";
 // import { Tracking } from "@prisma/client";
-function getColor(count: number, highestCount: number, color: string): string {
+function getColor(count: number, highestCount: number, _color: string): string {
     const x = count / highestCount;
     if (x == 0) {
         return `border bg-white`
