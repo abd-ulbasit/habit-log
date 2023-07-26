@@ -3,6 +3,17 @@ import { Checkbox } from "./ui/checkbox";
 import { isDateToday } from "~/lib/utils"
 import { useEffect } from "react";
 import { Trash, Trash2 } from "lucide-react";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "./ui/alert-dialog"
 
 const HabitList = () => {
     const trpcCtx = api.useContext()
@@ -56,9 +67,24 @@ const HabitList = () => {
                     return <li key={habit.id} className="flex items-center gap-2">
                         <Checkbox className="inline" onClick={() => handleMarkComplete(todayTracking.id)} checked={todayTracking.completed} disabled={updatetracking.status == "loading"} />
                         <p className="inline">{habit.name}</p>
-                        <button onClick={() => { handleDeleteHabit(habit.id) }} disabled={deleteHabit.isLoading}>
-                            <Trash2 />
-                        </button>
+                        <AlertDialog>
+                            <AlertDialogTrigger>
+                                <Trash2 />
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete your progress
+                                        and remove your data from our servers.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => { handleDeleteHabit(habit.id) }} disabled={deleteHabit.isLoading} >Continue</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </li>
                 }) : null
             }

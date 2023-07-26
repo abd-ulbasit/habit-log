@@ -29,7 +29,7 @@ export default function CreateHabit() {
         console.log(inputref.current?.value);
     }
     return (
-        <form onSubmit={handleCreateHabit} className="border flex flex-col gap-2">
+        <form onSubmit={handleCreateHabit} className="flex flex-col gap-2">
             <Label>Start A Habit</Label>
             <Input placeholder="Name it" ref={inputref} minLength={3} />
             <Button type="submit">Start Building</Button>
