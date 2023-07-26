@@ -32,7 +32,7 @@ const Home: NextPageWithLayout = () => {
         <meta name="description" content="It's a habit builder/Tracker.It's inspired by the green github contribution graph." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-hidden ">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 relative">
           {/* <h1>
             {hello.data ? `${hello.data.greeting}` : "Loading..."}
@@ -52,7 +52,7 @@ const Home: NextPageWithLayout = () => {
           </Draggable>
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[2] ?? { x: 0, y: 0 }}>
             <div onMouseDown={(e) => saveInitialPosition(2, e.clientX, e.clientY)} >
-              <Pomodoro initialTime={1300}></Pomodoro>
+              <Pomodoro ></Pomodoro>
             </div>
           </Draggable>
           <LastYearProgress></LastYearProgress>

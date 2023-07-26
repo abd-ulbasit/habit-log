@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 // import axios from 'axios';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface PomodoroProps {
-    initialTime: number; // Initial time in seconds
+    // initialTime: number; // Initial time in seconds
 }
 enum SessionType {
     "WORK",
     "Break"
 }
 
-const Pomodoro: React.FC<PomodoroProps> = ({ initialTime }) => {
+const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
+    const initialTime = 30;
     const [isRunning, setIsRunning] = useState(false);
     const [sessionType, setSessionType] = useState<SessionType>(SessionType.WORK); // Work session or break
     const [timeRemaining, setTimeRemaining] = useState(initialTime);
