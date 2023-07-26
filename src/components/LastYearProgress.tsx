@@ -6,18 +6,18 @@ import { areDatesSame } from "~/lib/utils";
 function getColor(count: number, highestCount: number, color: string): string {
     const x = count / highestCount;
     if (x == 0) {
-        return `border bg-${color}-50`
+        return `border bg-white`
     }
     else if (x <= .2) {
-        return `bg-${color}-300`
+        return `bg-green-300`
     } else if (x <= .4) {
-        return `bg-${color}-400`
+        return `bg-green-400`
     } else if (x <= .6) {
-        return `bg-${color}-500`
+        return `bg-green-500`
     } else if (x <= 0.8) {
-        return `bg-${color}-600`
+        return `bg-green-600`
     } else {
-        return `bg-${color}-700`
+        return `bg-green-700`
     }
 }
 
@@ -72,7 +72,7 @@ const LastYearProgress = () => {
                     const dayTraking = allTracking?.filter((t) => areDatesSame(date, t.date));
                     const count = dayTraking?.filter(t => t.completed == true).length ?? 0
                     return <Tooltip key={date.toISOString()} >
-                        <TooltipTrigger className={`w-3 h-3 rounded-sm  ${getColor(count, highestCount, "green")} `}></TooltipTrigger>
+                        <TooltipTrigger className={`w-3 h-3 rounded-sm  ${getColor(count, highestCount, `green`)} `}></TooltipTrigger>
                         <TooltipContent className="">{`${date.toDateString()} - ${count} commits`}</TooltipContent>
                     </Tooltip>
                 })

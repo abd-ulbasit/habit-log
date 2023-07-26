@@ -33,6 +33,7 @@ const HabitList = () => {
         }) : null;
     }, [habits.data])
     if (habits.isLoading) return <div>Loading...</div>
+    if (habits.error) return <div>{habits.error.message}</div>
     const handleMarkComplete = (trackingId: string) => {
         // console.log(trackingId, );
         updatetracking.mutate({ id: trackingId })
