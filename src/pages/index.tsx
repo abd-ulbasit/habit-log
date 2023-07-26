@@ -8,6 +8,7 @@ import HabitList from "~/components/HabitList";
 import LastYearProgress from "~/components/LastYearProgress";
 import Draggable from "~/components/Draggable";
 import { Button } from "~/components/ui/button";
+import Pomodoro from "~/components/Pomodoro";
 const Home: NextPageWithLayout = () => {
   const [initialPositions, setInitialPositions] = useState<{ x: number, y: number }[]>([]);
 
@@ -49,6 +50,7 @@ const Home: NextPageWithLayout = () => {
               <HabitList />
             </div>
           </Draggable>
+          <Pomodoro initialTime={20}></Pomodoro>
           <LastYearProgress></LastYearProgress>
         </div >
       </main >
