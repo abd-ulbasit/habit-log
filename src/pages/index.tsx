@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import type { NextPageWithLayout } from "./_app";
 import { useState, type ReactNode, useEffect } from "react";
 import MainLayout from "~/components/mainLayout";
@@ -9,7 +10,6 @@ import Draggable from "~/components/Draggable";
 import { Button } from "~/components/ui/button";
 import Pomodoro from "~/components/Pomodoro";
 import TodoList from "~/components/TodoList";
-// import { set } from "zod";
 enum Elements {
   POMODORO = 'POMODORO',
   HABBIT_LIST = 'HABBIT LIST',
@@ -17,8 +17,34 @@ enum Elements {
   TODO_LIST = 'TODO LIST',
   YEAR_PROGRESS = "PROGRESS"
 }
+interface backGroundImage {
+  name: string,
+  url: string
+}
 const NO_OF_DRAGGABLES = 6
 const Home: NextPageWithLayout = () => {
+  const allBackgrounds: backGroundImage[] = [{
+    name: "Arabian Night",
+    url: "/images/arabian_night.jpg"
+  },
+  {
+    name: "Lofi Boy",
+    url: "/images/lofi_boy.jpg"
+  }
+    , {
+    name: "Lofi Girl",
+    url: "/images/lofi_girl.jpg"
+  },
+  {
+    name: "Lofi Cat",
+    url: "/images/lofi_cat.jpg"
+  }
+    , {
+    name: "Lofi Night",
+    url: "/images/lofi_night.jpg"
+  }
+  ]
+  const [bg, setBg] = useState<backGroundImage>(allBackgrounds[0]!)
   const [visibleElements, setVisibleElements] = useState<string[]>(Object.values(Elements));
   const [initialPositions, setInitialPositions] = useState<{ x: number, y: number }[]>([]);
 
@@ -50,7 +76,21 @@ const Home: NextPageWithLayout = () => {
         <meta name="description" content="It's a habit builder/Tracker.It's inspired by the green github contribution graph." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="min-h-screen w-full  bg-gradient-to-b relative from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-hidden ">
+      <main style={{ backgroundImage: `url(${bg.url})` }} className="bg-cover bg-center min-h-screen w-full  bg-gradient-to-b relative from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-hidden ">
+        <Select onValueChange={(e) => { setBg(allBackgrounds.find((bg) => bg.name == e)!) }}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select a Wallpaper" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup >
+              <SelectLabel>WallPapers</SelectLabel>
+              {allBackgrounds.map((bg) => {
+
+                return <SelectItem value={bg.name} key={bg.url}>{bg.name}</SelectItem>
+              })}
+            </SelectGroup>
+          </SelectContent>
+        </Select >
         <div className="fixed top-16 left-2" >
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[5] ?? { x: 0, y: 0 }} >
             <div className="flex flex-col gap-1 float-left">
@@ -72,7 +112,7 @@ const Home: NextPageWithLayout = () => {
             </div>
           </Draggable>
         </div>
-
+        {/* <Image width={2500} height={1800} src={"/images/arabian_night.jpg"} alt="arabian_night"  ></Image> */}
         <div className="grid fixed right-20 top-20 grid-cols-2 gap-6" >
           {
 
@@ -130,3 +170,15 @@ Home.getLayout = function getLayout(page: ReactNode): ReactNode {
   )
 }
 export default Home;
+
+import * as React from "react"
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select"
