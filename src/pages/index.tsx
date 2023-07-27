@@ -15,26 +15,32 @@ enum Elements {
   HABBIT_LIST = 'HABBIT LIST',
   CREATE_HABIT = 'CREATE HABIT',
   TODO_LIST = 'TODO LIST',
+  YEAR_PROGRESS = "PROGRESS"
 }
+const NO_OF_DRAGGABLES = 6
 const Home: NextPageWithLayout = () => {
-  const [visibleElements, setVisibleElements] = useState<string[]>([]);
+  const [visibleElements, setVisibleElements] = useState<string[]>(Object.values(Elements));
   const [initialPositions, setInitialPositions] = useState<{ x: number, y: number }[]>([]);
 
   useEffect(() => {
-    const n = Array(3).fill({ x: 0, y: 0 });
+    const n = Array(NO_OF_DRAGGABLES).fill({ x: 0, y: 0 });
     setInitialPositions(n);
+    const storedVisibleElements = JSON.parse(localStorage.getItem('visibleElements') ?? '[]') as string[];
+    if (storedVisibleElements) {
+      setVisibleElements(storedVisibleElements);
+    }
   }, [])
   const resetPositions = () => {
     // Update the positions of all items to their initial positions
-    setInitialPositions(Array(3).fill({ x: 0, y: 0 }));
+    setInitialPositions(Array(NO_OF_DRAGGABLES).fill({ x: 0, y: 0 }));
   };
   const toggleElement = (element: string) => {
     setVisibleElements((prevVisibleElements) => {
-      if (prevVisibleElements.includes(element)) {
-        return prevVisibleElements.filter((el) => el !== element);
-      } else {
-        return [...prevVisibleElements, element];
-      }
+      const updatedVisibleElements = prevVisibleElements.includes(element)
+        ? prevVisibleElements.filter((el) => el !== element)
+        : [...prevVisibleElements, element];
+      localStorage.setItem('visibleElements', JSON.stringify(updatedVisibleElements));
+      return updatedVisibleElements;
     });
   };
   return (
@@ -46,24 +52,25 @@ const Home: NextPageWithLayout = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-hidden ">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 relative">
-          <div>
-            <Button onClick={resetPositions}>
-              Reset All
-            </Button>
-            <div  >{
-              Object.values(Elements).map((element) => (
-                <Button
-                  key={element}
-                  onClick={() => toggleElement(element)}
+          <Draggable resetPositions={resetPositions} initialPosition={initialPositions[5] ?? { x: 0, y: 0 }} >
+            <div className="flex flex-col gap-1 float-left">
+              <Button onClick={resetPositions}>
+                Reset All
+              </Button>
+              {
+                Object.values(Elements).map((element) => (
+                  <Button
+                    key={element}
+                    onClick={() => toggleElement(element)}
 
-                  variant={visibleElements.includes(element) ? 'outline' : 'default'}
-                >
-                  {element}
-                </Button>
-              ))
-            }
+                    variant={visibleElements.includes(element) ? 'outline' : 'default'}
+                  >
+                    {element}
+                  </Button>
+                ))
+              }
             </div>
-          </div>
+          </Draggable>
           {
             visibleElements.includes(Elements.POMODORO) &&
             <Draggable resetPositions={resetPositions} initialPosition={initialPositions[0] ?? { x: 0, y: 0 }}  >
@@ -80,7 +87,11 @@ const Home: NextPageWithLayout = () => {
           {
 
             visibleElements.includes(Elements.TODO_LIST) &&
-            <TodoList></TodoList>
+            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[3] ?? {
+              x: 0, y: 0
+            }} >
+              <TodoList></TodoList>
+            </Draggable>
           }
           {
 
@@ -89,7 +100,11 @@ const Home: NextPageWithLayout = () => {
               <CreateHabit />
             </Draggable>
           }
-          <LastYearProgress></LastYearProgress>
+          {visibleElements.includes(Elements.YEAR_PROGRESS) &&
+            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[4] ?? { x: 0, y: 0 }} >
+              <LastYearProgress></LastYearProgress>
+            </Draggable>
+          }
         </div >
       </main >
     </>
