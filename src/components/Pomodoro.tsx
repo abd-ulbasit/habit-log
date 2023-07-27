@@ -27,6 +27,7 @@ enum SessionType {
 const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
     const addpomodoro = api.habit.addPomodoroSession.useMutation();
     const [workMin, setWorkMin] = useState<number>(20)
+    const [breakMin, setBreakMin] = useState<number>(5)
     const [isRunning, setIsRunning] = useState(false);
     const [sessionType, setSessionType] = useState<SessionType>(SessionType.WORK); // Work session or break
     const [timeRemaining, setTimeRemaining] = useState(workMin * 60);
@@ -60,6 +61,7 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
     const handleReset = () => {
         setIsRunning(false);
         setTimeRemaining(workMin * 60); // Reset to the initial time
+        setSessionType(SessionType.WORK)
     };
 
     const handleCycleComplete = () => {
@@ -77,12 +79,13 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
             if (sessionType === SessionType.Break) {
                 return workMin * 60
             } else {
-                return 5 * 60
+                return breakMin * 60
             }
         })
         setIsRunning(true)
     };
-
+    const MINIMUN_BREAK = 2
+    const MINIMUM_WORK = 5
     return (
         <div className='p-8 flex relative flex-col gap-4 border rounded-3xl shadow-lg scale-110'>
 
@@ -91,21 +94,29 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
                 <AlertDialog >
                     <AlertDialogTrigger ><Settings></Settings></AlertDialogTrigger>
                     <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Change Pomodoro Timings</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                <h2 className='text-lg font-bold'>Change Work Duration</h2>
-                                <div className='flex gap-2'>
-                                    <Button onClick={() => setWorkMin((prev) => prev - 1)}><Minus></Minus></Button>
-                                    <Input type={'number'} value={workMin} onChange={(e) => setWorkMin(e.currentTarget.valueAsNumber)}></Input>
-                                    <Button onClick={() => setWorkMin((prev) => prev + 1)}><Plus></Plus></Button>
-                                </div>
-                                {/* <input type='number'> </input> */}
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogAction>Continue</AlertDialogAction>
-                        </AlertDialogFooter>
+                        <form onSubmit={e => e.preventDefault()}>
+
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Change Pomodoro Timings</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    <h2 className='py-3 font-bold'>Change Work Duration</h2>
+                                    <div className='flex gap-2'>
+                                        <Button onClick={() => setWorkMin((prev) => prev > MINIMUM_WORK ? prev - 1 : prev)}><Minus></Minus></Button>
+                                        <Input type={'number'} value={workMin} onChange={(e) => setWorkMin(e.currentTarget.valueAsNumber)} min={MINIMUM_WORK}></Input>
+                                        <Button onClick={() => setWorkMin((prev) => prev + 1)}><Plus></Plus></Button>
+                                    </div>
+                                    <h2 className='py-3 font-bold'>Change Break Duration</h2>
+                                    <div className='flex gap-2'>
+                                        <Button onClick={() => setBreakMin((prev) => prev > MINIMUN_BREAK ? prev - 1 : prev)}><Minus></Minus></Button>
+                                        <Input type={'number'} value={breakMin} onChange={(e) => setBreakMin(e.currentTarget.valueAsNumber)} min={MINIMUN_BREAK}></Input>
+                                        <Button onClick={() => setBreakMin((prev) => prev + 1)}><Plus></Plus></Button>
+                                    </div>
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogAction type='submit' disabled={breakMin < MINIMUN_BREAK || workMin < MINIMUM_WORK || isNaN(breakMin) || isNaN(workMin)} >Continue</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </form>
                     </AlertDialogContent>
                 </AlertDialog>
             </div>
