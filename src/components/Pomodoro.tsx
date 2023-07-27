@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { api } from '~/utils/api';
-// import axios from 'axios';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "./ui/alert-dialog"
+import { Settings } from 'lucide-react';
+
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface PomodoroProps {
@@ -14,7 +26,7 @@ enum SessionType {
 
 const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
     const addpomodoro = api.habit.addPomodoroSession.useMutation();
-    const initialTime = 30;
+    const initialTime = 20 * 60;
     const [isRunning, setIsRunning] = useState(false);
     const [sessionType, setSessionType] = useState<SessionType>(SessionType.WORK); // Work session or break
     const [timeRemaining, setTimeRemaining] = useState(initialTime);
@@ -63,7 +75,7 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
             if (sessionType === SessionType.Break) {
                 return initialTime
             } else {
-                return 5
+                return 5 * 60
             }
         })
         setIsRunning(true)
@@ -71,7 +83,23 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
 
     return (
         <div className='p-8 flex flex-col gap-4 border rounded-3xl shadow-lg scale-110'>
+
             <p className='text-center uppercase '>{sessionType == SessionType.Break ? "Break" : "Work"}</p>
+            <AlertDialog>
+                <AlertDialogTrigger ><Settings></Settings></AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Change Pomodoro Timings</AlertDialogTitle>
+                        <AlertDialogDescription>
+
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
             <p className='text-9xl font-extrabold text-center'>{`${Math.floor(timeRemaining / 60)}:${('0' + (timeRemaining % 60)).slice(-2)}`}</p>
             <div className='self-center scale-125 gap-2   '>
 

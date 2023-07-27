@@ -8,6 +8,7 @@ import LastYearProgress from "~/components/LastYearProgress";
 import Draggable from "~/components/Draggable";
 import { Button } from "~/components/ui/button";
 import Pomodoro from "~/components/Pomodoro";
+import TodoList from "~/components/TodoList";
 // import { set } from "zod";
 const Home: NextPageWithLayout = () => {
   const [initialPositions, setInitialPositions] = useState<{ x: number, y: number }[]>([]);
@@ -43,6 +44,7 @@ const Home: NextPageWithLayout = () => {
             <HabitList />
             {/* </div> */}
           </Draggable>
+          <TodoList></TodoList>
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[2] ?? { x: 0, y: 0 }}>
             {/* <div onMouseDown={(e) => saveInitialPosition(2, e.clientX, e.clientY)} > */}
             <CreateHabit />

@@ -95,7 +95,7 @@ const LastYearProgress = () => {
                     const count = dayTraking?.filter(t => t.completed == true).length ?? 0
                     return <Tooltip key={date.toISOString()} >
                         <TooltipTrigger className={`w-3 h-3 rounded-sm  ${getColor(count, highestCount, `green`)} `}></TooltipTrigger>
-                        <TooltipContent className="">{`${date.toDateString()} - ${count} commits`}</TooltipContent>
+                        <TooltipContent className="">{`${date.toDateString()} - ${count} points`}</TooltipContent>
                     </Tooltip>
                 })
                 }
