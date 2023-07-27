@@ -4,7 +4,6 @@ import { api } from '~/utils/api';
 import {
     AlertDialog,
     AlertDialogAction,
-    AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
@@ -12,7 +11,8 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "./ui/alert-dialog"
-import { Settings } from 'lucide-react';
+import { Minus, Plus, Settings } from 'lucide-react';
+import { Input } from './ui/input';
 
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -26,10 +26,10 @@ enum SessionType {
 
 const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
     const addpomodoro = api.habit.addPomodoroSession.useMutation();
-    const initialTime = 20 * 60;
+    const [workMin, setWorkMin] = useState<number>(20)
     const [isRunning, setIsRunning] = useState(false);
     const [sessionType, setSessionType] = useState<SessionType>(SessionType.WORK); // Work session or break
-    const [timeRemaining, setTimeRemaining] = useState(initialTime);
+    const [timeRemaining, setTimeRemaining] = useState(workMin * 60);
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -46,7 +46,9 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
 
         return () => clearTimeout(timer);
     }, [isRunning, timeRemaining]);
-
+    useEffect(() => {
+        setTimeRemaining(workMin * 60)
+    }, [workMin])
     const handleStart = () => {
         setIsRunning(true);
     };
@@ -57,7 +59,7 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
 
     const handleReset = () => {
         setIsRunning(false);
-        setTimeRemaining(initialTime); // Reset to the initial time
+        setTimeRemaining(workMin * 60); // Reset to the initial time
     };
 
     const handleCycleComplete = () => {
@@ -73,7 +75,7 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
         setSessionType((prev) => { return prev == SessionType.Break ? SessionType.WORK : SessionType.Break })
         setTimeRemaining(() => {
             if (sessionType === SessionType.Break) {
-                return initialTime
+                return workMin * 60
             } else {
                 return 5 * 60
             }
@@ -82,23 +84,31 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
     };
 
     return (
-        <div className='p-8 flex flex-col gap-4 border rounded-3xl shadow-lg scale-110'>
+        <div className='p-8 flex relative flex-col gap-4 border rounded-3xl shadow-lg scale-110'>
 
-            <p className='text-center uppercase '>{sessionType == SessionType.Break ? "Break" : "Work"}</p>
-            <AlertDialog>
-                <AlertDialogTrigger ><Settings></Settings></AlertDialogTrigger>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Change Pomodoro Timings</AlertDialogTitle>
-                        <AlertDialogDescription>
-
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogAction>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+            <p className='text-center uppercase inline'>{sessionType == SessionType.Break ? "Break" : "Work"}</p>
+            <div className='fixed right-6 top-6' >
+                <AlertDialog >
+                    <AlertDialogTrigger ><Settings></Settings></AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Change Pomodoro Timings</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                <h2 className='text-lg font-bold'>Change Work Duration</h2>
+                                <div className='flex gap-2'>
+                                    <Button onClick={() => setWorkMin((prev) => prev - 1)}><Minus></Minus></Button>
+                                    <Input type={'number'} value={workMin} onChange={(e) => setWorkMin(e.currentTarget.valueAsNumber)}></Input>
+                                    <Button onClick={() => setWorkMin((prev) => prev + 1)}><Plus></Plus></Button>
+                                </div>
+                                {/* <input type='number'> </input> */}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogAction>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
 
             <p className='text-9xl font-extrabold text-center'>{`${Math.floor(timeRemaining / 60)}:${('0' + (timeRemaining % 60)).slice(-2)}`}</p>
             <div className='self-center scale-125 gap-2   '>
@@ -110,7 +120,7 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
                 )}
                 <Button onClick={handleReset} variant={'ghost'}>Reset</Button>
             </div>
-        </div>
+        </div >
     );
 };
 
