@@ -1,3 +1,18 @@
+import * as React from "react"
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select"
+import { ModeToggle } from "~/components/ui/modeToggler";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+
 import Head from "next/head";
 import Image from "next/image";
 import type { NextPageWithLayout } from "./_app";
@@ -22,28 +37,37 @@ interface backGroundImage {
   url: string
 }
 const NO_OF_DRAGGABLES = 6
+const allBackgrounds: backGroundImage[] = [{
+  name: "Arabian Night",
+  url: "/images/arabian_night.jpg"
+},
+{
+  name: "Lofi Boy",
+  url: "/images/lofi_boy.jpg"
+}
+  , {
+  name: "Lofi Girl",
+  url: "/images/lofi_girl.jpg"
+},
+{
+  name: "Lofi Cat",
+  url: "/images/lofi_cat.jpg"
+}
+  , {
+  name: "Lofi Night",
+  url: "/images/lofi_night.jpg"
+}
+]
 const Home: NextPageWithLayout = () => {
-  const allBackgrounds: backGroundImage[] = [{
-    name: "Arabian Night",
-    url: "/images/arabian_night.jpg"
-  },
-  {
-    name: "Lofi Boy",
-    url: "/images/lofi_boy.jpg"
+  const router = useRouter();
+  const { status, data } = useSession();
+  const handleLogin = () => {
+    if (status == "authenticated") {
+      void signOut().then().catch()
+    } else {
+      void router.push("/login").then().catch()
+    }
   }
-    , {
-    name: "Lofi Girl",
-    url: "/images/lofi_girl.jpg"
-  },
-  {
-    name: "Lofi Cat",
-    url: "/images/lofi_cat.jpg"
-  }
-    , {
-    name: "Lofi Night",
-    url: "/images/lofi_night.jpg"
-  }
-  ]
   const [bg, setBg] = useState<backGroundImage>(allBackgrounds[0]!)
   const [visibleElements, setVisibleElements] = useState<string[]>(Object.values(Elements));
   const [initialPositions, setInitialPositions] = useState<{ x: number, y: number }[]>([]);
@@ -77,21 +101,14 @@ const Home: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main style={{ backgroundImage: `url(${bg.url})` }} className="bg-cover bg-center min-h-screen w-full  bg-gradient-to-b relative from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-hidden ">
-        <Select onValueChange={(e) => { setBg(allBackgrounds.find((bg) => bg.name == e)!) }}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a Wallpaper" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup >
-              <SelectLabel>WallPapers</SelectLabel>
-              {allBackgrounds.map((bg) => {
-
-                return <SelectItem value={bg.name} key={bg.url}>{bg.name}</SelectItem>
-              })}
-            </SelectGroup>
-          </SelectContent>
-        </Select >
-        <div className="fixed top-16 left-2" >
+        <nav className="flex p-2 items-center justify-between fixed  w-full backdrop-blur-none bg-opacity-95 z-30">
+          <p>{status == "authenticated" ? `Welcome ${data?.user.name}` : "You are gay"}</p>
+          <div className="flex gap-2">
+            <ModeToggle></ModeToggle>
+            <Button onClick={handleLogin} >{status == "authenticated" ? "LogOut" : "Go to Login Page"}</Button>
+          </div>
+        </nav>
+        <div className="fixed top-16 left-2 flex flex-col gap-4" >
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[5] ?? { x: 0, y: 0 }} >
             <div className="flex flex-col gap-1 float-left">
               <Button onClick={resetPositions}>
@@ -111,6 +128,20 @@ const Home: NextPageWithLayout = () => {
               }
             </div>
           </Draggable>
+          <Select onValueChange={(e) => { setBg(allBackgrounds.find((bg) => bg.name == e)!) }}>
+            <SelectTrigger className="w-[146px]">
+              <SelectValue placeholder="Wallpaper" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup >
+                <SelectLabel>WallPapers</SelectLabel>
+                {allBackgrounds.map((bg) => {
+
+                  return <SelectItem value={bg.name} key={bg.url}>{bg.name}</SelectItem>
+                })}
+              </SelectGroup>
+            </SelectContent>
+          </Select >
         </div>
         {/* <Image width={2500} height={1800} src={"/images/arabian_night.jpg"} alt="arabian_night"  ></Image> */}
         <div className="grid fixed right-20 top-20 grid-cols-2 gap-6" >
@@ -162,23 +193,12 @@ const Home: NextPageWithLayout = () => {
     </>
   );
 }
-Home.getLayout = function getLayout(page: ReactNode): ReactNode {
-  return (
-    <MainLayout>
-      {page}
-    </MainLayout>
-  )
-}
+// Home.getLayout = function getLayout(page: ReactNode): ReactNode {
+//   return (
+//     <MainLayout>
+//       {page}
+//     </MainLayout>
+//   )
+// }
 export default Home;
 
-import * as React from "react"
-
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"

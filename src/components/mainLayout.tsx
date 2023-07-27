@@ -17,14 +17,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     }
     return (
         <>
-            <nav className="flex p-2 items-center justify-between">
+            <nav className="flex p-2 items-center justify-between fixed  w-full backdrop-blur-sm bg-opacity-95 z-30">
                 <p>{status == "authenticated" ? `Welcome ${data?.user.name}` : "You are gay"}</p>
                 <div className="flex gap-2">
                     <ModeToggle></ModeToggle>
                     <Button onClick={handleLogin} >{status == "authenticated" ? "LogOut" : "Go to Login Page"}</Button>
                 </div>
             </nav>
-            {children}
+            <div className="pt-12" >
+                {children}
+            </div>
         </>
     )
 }
