@@ -10,7 +10,14 @@ import { Button } from "~/components/ui/button";
 import Pomodoro from "~/components/Pomodoro";
 import TodoList from "~/components/TodoList";
 // import { set } from "zod";
+enum Elements {
+  "POMODORO",
+  "HABBIT LIST",
+  "CREATE HABIT",
+  "TODO LIST"
+}
 const Home: NextPageWithLayout = () => {
+  const [hidden, sethidden] = useState<Elements[]>([])
   const [initialPositions, setInitialPositions] = useState<{ x: number, y: number }[]>([]);
 
   useEffect(() => {
@@ -30,25 +37,26 @@ const Home: NextPageWithLayout = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-hidden ">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 relative">
-          <Button onClick={resetPositions}>
-            Reset All
-          </Button>
-
-          <Draggable resetPositions={resetPositions} initialPosition={initialPositions[0] ?? { x: 0, y: 0 }}  >
-            {/* <div className="p-4" onMouseDown={(e) => saveInitialPosition(0, e.clientX, e.clientY)}> */}
-            <Pomodoro ></Pomodoro>
-            {/* </div> */}
-          </Draggable>
+          <div>
+            <Button onClick={resetPositions}>
+              Reset All
+            </Button>
+            <div  >
+              <Button onClick={() => sethidden((prev) => prev.includes(Elements.POMODORO) ? prev.filter((x) => x != Elements.POMODORO) : [...prev, Elements.POMODORO])}>Pomodoro</Button>
+            </div>
+          </div>
+          {
+            !hidden.includes(Elements.POMODORO) &&
+            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[0] ?? { x: 0, y: 0 }}  >
+              <Pomodoro ></Pomodoro>
+            </Draggable>
+          }
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[1] ?? { x: 0, y: 0 }} >
-            {/* <div className="p-4" onMouseDown={(e) => saveInitialPosition(1, e.clientX, e.clientY)}> */}
             <HabitList />
-            {/* </div> */}
           </Draggable>
           <TodoList></TodoList>
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[2] ?? { x: 0, y: 0 }}>
-            {/* <div onMouseDown={(e) => saveInitialPosition(2, e.clientX, e.clientY)} > */}
             <CreateHabit />
-            {/* </div> */}
           </Draggable>
           <LastYearProgress></LastYearProgress>
         </div >

@@ -106,7 +106,7 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
                                         <Button onClick={() => setWorkMin((prev) => prev + 1)}><Plus></Plus></Button>
                                     </div>
                                     <h2 className='py-3 font-bold'>Change Break Duration</h2>
-                                    <div className='flex gap-2'>
+                                    <div className='flex gap-2 pb-4'>
                                         <Button onClick={() => setBreakMin((prev) => prev > MINIMUN_BREAK ? prev - 1 : prev)}><Minus></Minus></Button>
                                         <Input type={'number'} value={breakMin} onChange={(e) => setBreakMin(e.currentTarget.valueAsNumber)} min={MINIMUN_BREAK}></Input>
                                         <Button onClick={() => setBreakMin((prev) => prev + 1)}><Plus></Plus></Button>
