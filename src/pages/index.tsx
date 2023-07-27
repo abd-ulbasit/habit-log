@@ -11,13 +11,13 @@ import Pomodoro from "~/components/Pomodoro";
 import TodoList from "~/components/TodoList";
 // import { set } from "zod";
 enum Elements {
-  "POMODORO",
-  "HABBIT LIST",
-  "CREATE HABIT",
-  "TODO LIST"
+  POMODORO = 'POMODORO',
+  HABBIT_LIST = 'HABBIT LIST',
+  CREATE_HABIT = 'CREATE HABIT',
+  TODO_LIST = 'TODO LIST',
 }
 const Home: NextPageWithLayout = () => {
-  const [hidden, sethidden] = useState<Elements[]>([])
+  const [visibleElements, setVisibleElements] = useState<string[]>([]);
   const [initialPositions, setInitialPositions] = useState<{ x: number, y: number }[]>([]);
 
   useEffect(() => {
@@ -27,6 +27,15 @@ const Home: NextPageWithLayout = () => {
   const resetPositions = () => {
     // Update the positions of all items to their initial positions
     setInitialPositions(Array(3).fill({ x: 0, y: 0 }));
+  };
+  const toggleElement = (element: string) => {
+    setVisibleElements((prevVisibleElements) => {
+      if (prevVisibleElements.includes(element)) {
+        return prevVisibleElements.filter((el) => el !== element);
+      } else {
+        return [...prevVisibleElements, element];
+      }
+    });
   };
   return (
     <>
@@ -41,23 +50,45 @@ const Home: NextPageWithLayout = () => {
             <Button onClick={resetPositions}>
               Reset All
             </Button>
-            <div  >
-              <Button onClick={() => sethidden((prev) => prev.includes(Elements.POMODORO) ? prev.filter((x) => x != Elements.POMODORO) : [...prev, Elements.POMODORO])}>Pomodoro</Button>
+            <div  >{
+              Object.values(Elements).map((element) => (
+                <Button
+                  key={element}
+                  onClick={() => toggleElement(element)}
+
+                  variant={visibleElements.includes(element) ? 'outline' : 'default'}
+                >
+                  {element}
+                </Button>
+              ))
+            }
             </div>
           </div>
           {
-            !hidden.includes(Elements.POMODORO) &&
+            visibleElements.includes(Elements.POMODORO) &&
             <Draggable resetPositions={resetPositions} initialPosition={initialPositions[0] ?? { x: 0, y: 0 }}  >
               <Pomodoro ></Pomodoro>
             </Draggable>
           }
-          <Draggable resetPositions={resetPositions} initialPosition={initialPositions[1] ?? { x: 0, y: 0 }} >
-            <HabitList />
-          </Draggable>
-          <TodoList></TodoList>
-          <Draggable resetPositions={resetPositions} initialPosition={initialPositions[2] ?? { x: 0, y: 0 }}>
-            <CreateHabit />
-          </Draggable>
+          {
+
+            visibleElements.includes(Elements.HABBIT_LIST) &&
+            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[1] ?? { x: 0, y: 0 }} >
+              <HabitList />
+            </Draggable>
+          }
+          {
+
+            visibleElements.includes(Elements.TODO_LIST) &&
+            <TodoList></TodoList>
+          }
+          {
+
+            visibleElements.includes(Elements.CREATE_HABIT) &&
+            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[2] ?? { x: 0, y: 0 }}>
+              <CreateHabit />
+            </Draggable>
+          }
           <LastYearProgress></LastYearProgress>
         </div >
       </main >
