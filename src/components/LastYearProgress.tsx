@@ -89,7 +89,7 @@ const LastYearProgress = () => {
     }, [scrollableref.current])
     return (
         <TooltipProvider >
-            < div className="grid grid-rows-7 grid-flow-col gap-1 w-full lg:w-auto overflow-scroll " ref={scrollableref}>
+            < div className="grid grid-rows-7 grid-flow-col gap-1 w-full lg:w-auto overflow-scroll pb-4 " ref={scrollableref}>
                 {dates.map((date) => {
                     const dayTraking = allTracking?.filter((t) => areDatesSame(date, t.date));
                     const count = dayTraking?.filter(t => t.completed == true).length ?? 0

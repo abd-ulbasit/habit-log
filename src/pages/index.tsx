@@ -50,8 +50,8 @@ const Home: NextPageWithLayout = () => {
         <meta name="description" content="It's a habit builder/Tracker.It's inspired by the green github contribution graph." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-hidden ">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 relative">
+      <main className="min-h-screen w-full  bg-gradient-to-b relative from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-hidden ">
+        <div className="fixed top-16 left-2" >
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[5] ?? { x: 0, y: 0 }} >
             <div className="flex flex-col gap-1 float-left">
               <Button onClick={resetPositions}>
@@ -71,27 +71,37 @@ const Home: NextPageWithLayout = () => {
               }
             </div>
           </Draggable>
+        </div>
+
+        <div className="grid fixed right-20 top-20 grid-cols-2 gap-6" >
+          {
+
+            visibleElements.includes(Elements.TODO_LIST) &&
+            <div className="  " >
+              <Draggable resetPositions={resetPositions} initialPosition={initialPositions[3] ?? {
+                x: 0, y: 0
+              }} >
+                <TodoList></TodoList>
+              </Draggable>
+            </div>
+          }
           {
             visibleElements.includes(Elements.POMODORO) &&
-            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[0] ?? { x: 0, y: 0 }}  >
-              <Pomodoro ></Pomodoro>
-            </Draggable>
+            <div className="" >
+              <Draggable resetPositions={resetPositions} initialPosition={initialPositions[0] ?? { x: 0, y: 0 }}  >
+                <Pomodoro ></Pomodoro>
+              </Draggable>
+            </div>
           }
           {
 
             visibleElements.includes(Elements.HABBIT_LIST) &&
-            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[1] ?? { x: 0, y: 0 }} >
-              <HabitList />
-            </Draggable>
-          }
-          {
+            <div className="ml-auto  float-right pr-4">
 
-            visibleElements.includes(Elements.TODO_LIST) &&
-            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[3] ?? {
-              x: 0, y: 0
-            }} >
-              <TodoList></TodoList>
-            </Draggable>
+              <Draggable resetPositions={resetPositions} initialPosition={initialPositions[1] ?? { x: 0, y: 0 }} >
+                <HabitList />
+              </Draggable>
+            </div>
           }
           {
 
@@ -100,12 +110,14 @@ const Home: NextPageWithLayout = () => {
               <CreateHabit />
             </Draggable>
           }
-          {visibleElements.includes(Elements.YEAR_PROGRESS) &&
+        </div>
+        {visibleElements.includes(Elements.YEAR_PROGRESS) &&
+          <div className="fixed bottom-2 left-2" >
             <Draggable resetPositions={resetPositions} initialPosition={initialPositions[4] ?? { x: 0, y: 0 }} >
               <LastYearProgress></LastYearProgress>
             </Draggable>
-          }
-        </div >
+          </div>
+        }
       </main >
     </>
   );
