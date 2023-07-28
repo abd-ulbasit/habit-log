@@ -64,6 +64,8 @@ const Draggable: React.FC<DraggableProps> = ({ children, initialPosition, resetP
         }
 
         if ('touches' in e) {
+            //trying to prevent pull to refresh behavior
+            e.preventDefault()
             // Touch event
             setTouchDelayTimer(window.setTimeout(() => {
                 setIsDragging(true);
@@ -98,7 +100,7 @@ const Draggable: React.FC<DraggableProps> = ({ children, initialPosition, resetP
 
     return (
         <div
-            className={`relative transition-transform duration-300 ${isTouchHold ? 'border-2 border-blue-500' : ''}`}
+            className={`relative transition-transform duration-300 ${isTouchHold ? 'scale-105' : ''}`}
             onMouseDown={isDraggable ? handleStart : undefined}
             onTouchStart={isDraggable ? handleStart : undefined}
             onTouchCancel={isDraggable ? handleCancel : undefined}
