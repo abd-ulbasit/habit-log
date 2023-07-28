@@ -4,11 +4,12 @@ interface DraggableProps {
     children: React.ReactNode;
     initialPosition: { x: number; y: number };
     resetPositions: () => void;
+    isDraggable: boolean; // New prop to indicate whether the element is draggable or not
 }
 
-const DRAG_DELAY_MS = 1000; // Adjust the delay as needed
+const DRAG_DELAY_MS = 300; // Adjust the delay as needed
 
-const Draggable: React.FC<DraggableProps> = ({ children, initialPosition, resetPositions }) => {
+const Draggable: React.FC<DraggableProps> = ({ children, initialPosition, resetPositions, isDraggable }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [startPosX, setStartPosX] = useState(0);
     const [startPosY, setStartPosY] = useState(0);
@@ -54,6 +55,8 @@ const Draggable: React.FC<DraggableProps> = ({ children, initialPosition, resetP
     }, [isDragging, currentPosX, currentPosY, startPosX, startPosY]);
 
     const handleStart = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+        if (!isDraggable) return; // If not draggable, do nothing
+
         if (isTouchHold) {
             // Touch delay timer already started, prevent default behavior
             e.preventDefault();
@@ -96,10 +99,10 @@ const Draggable: React.FC<DraggableProps> = ({ children, initialPosition, resetP
     return (
         <div
             className={`relative transition-transform duration-300 ${isTouchHold ? 'border-2 border-blue-500' : ''}`}
-            onMouseDown={handleStart}
-            onTouchStart={handleStart}
-            onTouchCancel={handleCancel}
-            onTouchEnd={handleCancel}
+            onMouseDown={isDraggable ? handleStart : undefined}
+            onTouchStart={isDraggable ? handleStart : undefined}
+            onTouchCancel={isDraggable ? handleCancel : undefined}
+            onTouchEnd={isDraggable ? handleCancel : undefined}
             style={{ transform: `translate(${currentPosX}px, ${currentPosY}px)` }}
         >
             {children}
