@@ -194,7 +194,7 @@ const Home: NextPageWithLayout = () => {
           </Select >
         </div>
         {/* <Image width={2500} height={1800} src={"/images/arabian_night.jpg"} alt="arabian_night"  ></Image> */}
-        <div className="grid fixed right-20 top-20 grid-cols-2 gap-6" >
+        <div className="grid fixed right-20 top-20 grid-cols-1 sm:grid-cols-2 gap-6" >
           {
 
             visibleElements.includes(Elements.TODO_LIST) &&
