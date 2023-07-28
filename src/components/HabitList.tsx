@@ -37,8 +37,6 @@ const HabitList = () => {
         habits.data ? habits.data.map((habit) => {
             const todayTracking = habit.Completed.find((t) => isDateToday(t.date))
             if (!todayTracking) {
-                console.log("creating traking ");
-
                 createTracking.mutate({ habitId: habit.id })
             }
         }) : null;

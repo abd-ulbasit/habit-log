@@ -1,4 +1,12 @@
 import * as React from "react"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "~/components/ui/sheet"
 
 import {
   Select,
@@ -14,10 +22,8 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import Head from "next/head";
-import Image from "next/image";
 import type { NextPageWithLayout } from "./_app";
 import { useState, type ReactNode, useEffect } from "react";
-import MainLayout from "~/components/mainLayout";
 import CreateHabit from "~/components/CreateHabit";
 import HabitList from "~/components/HabitList";
 import LastYearProgress from "~/components/LastYearProgress";
@@ -25,6 +31,7 @@ import Draggable from "~/components/Draggable";
 import { Button } from "~/components/ui/button";
 import Pomodoro from "~/components/Pomodoro";
 import TodoList from "~/components/TodoList";
+import { MenuIcon } from "lucide-react";
 enum Elements {
   POMODORO = 'POMODORO',
   HABBIT_LIST = 'HABBIT LIST',
@@ -104,11 +111,54 @@ const Home: NextPageWithLayout = () => {
         <nav className="flex p-2 items-center justify-between fixed  w-full backdrop-blur-none bg-opacity-95 z-30">
           <p>{status == "authenticated" ? `Welcome ${data?.user.name}` : "You are gay"}</p>
           <div className="flex gap-2">
+            <Sheet>
+              <SheetTrigger className="block md:hidden"><MenuIcon></MenuIcon></SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetDescription className="flex flex-col gap-2">
+
+                    <div className="flex flex-col gap-1 float-left">
+                      <Button onClick={resetPositions}>
+                        Reset All
+                      </Button>
+                      {
+                        Object.values(Elements).map((element) => (
+                          <Button
+                            key={element}
+                            onClick={() => toggleElement(element)}
+
+                            variant={visibleElements.includes(element) ? 'outline' : 'default'}
+                          >
+                            {element}
+                          </Button>
+                        ))
+                      }
+                    </div>
+                    <Select onValueChange={(e) => { setBg(allBackgrounds.find((bg) => bg.name == e)!) }}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Wallpaper" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup >
+                          <SelectLabel>WallPapers</SelectLabel>
+                          {allBackgrounds.map((bg) => {
+
+                            return <SelectItem value={bg.name} key={bg.url}>{bg.name}</SelectItem>
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select >
+
+                  </SheetDescription>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
             <ModeToggle></ModeToggle>
             <Button onClick={handleLogin} >{status == "authenticated" ? "LogOut" : "Go to Login Page"}</Button>
           </div>
+
         </nav>
-        <div className="fixed top-16 left-2 flex flex-col gap-4 z-10" >
+        <div className="fixed top-16 left-2 flex flex-col gap-4 z-10 md:block hidden" >
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[5] ?? { x: 0, y: 0 }} >
             <div className="flex flex-col gap-1 float-left">
               <Button onClick={resetPositions}>
@@ -193,12 +243,5 @@ const Home: NextPageWithLayout = () => {
     </>
   );
 }
-// Home.getLayout = function getLayout(page: ReactNode): ReactNode {
-//   return (
-//     <MainLayout>
-//       {page}
-//     </MainLayout>
-//   )
-// }
 export default Home;
 
