@@ -63,6 +63,9 @@ const allBackgrounds: backGroundImage[] = [{
   , {
   name: "Lofi Night",
   url: "/images/lofi_night.jpg"
+}, {
+  name: "None",
+  url: ""
 }
 ]
 const Home: NextPageWithLayout = () => {

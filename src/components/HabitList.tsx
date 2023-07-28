@@ -60,8 +60,6 @@ const HabitList = () => {
                     if (!todayTracking) {
                         return
                     }
-                    console.log({ todayTracking });
-
                     return <li key={habit.id} className="flex items-center gap-2">
                         <Checkbox className="inline" onClick={() => handleMarkComplete(todayTracking.id)} checked={todayTracking.completed} disabled={updatetracking.status == "loading"} />
                         <p className="inline">{habit.name}</p>
