@@ -215,6 +215,13 @@ const Home: NextPageWithLayout = () => {
           }
           {
 
+            visibleElements.includes(Elements.CREATE_HABIT) &&
+            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[2] ?? { x: 0, y: 0 }}>
+              <CreateHabit />
+            </Draggable>
+          }
+          {
+
             visibleElements.includes(Elements.HABBIT_LIST) &&
             <div className="md:ml-auto  float-right pr-4  mx-auto w-4/5 sm:w-auto ">
 
@@ -223,16 +230,9 @@ const Home: NextPageWithLayout = () => {
               </Draggable>
             </div>
           }
-          {
-
-            visibleElements.includes(Elements.CREATE_HABIT) &&
-            <Draggable resetPositions={resetPositions} initialPosition={initialPositions[2] ?? { x: 0, y: 0 }}>
-              <CreateHabit />
-            </Draggable>
-          }
         </div>
         {visibleElements.includes(Elements.YEAR_PROGRESS) &&
-          <div className="sm:fixed sm:bottom-2 sm:left-2  relative " >
+          <div className="sm:fixed sm:bottom-2 sm:left-2  relative w-4/5 mx-auto lg:w-auto self-center" >
             <Draggable resetPositions={resetPositions} initialPosition={initialPositions[4] ?? { x: 0, y: 0 }} >
               <LastYearProgress></LastYearProgress>
             </Draggable>
