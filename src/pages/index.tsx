@@ -108,7 +108,7 @@ const Home: NextPageWithLayout = () => {
             <Button onClick={handleLogin} >{status == "authenticated" ? "LogOut" : "Go to Login Page"}</Button>
           </div>
         </nav>
-        <div className="fixed top-16 left-2 flex flex-col gap-4" >
+        <div className="fixed top-16 left-2 flex flex-col gap-4 z-10" >
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[5] ?? { x: 0, y: 0 }} >
             <div className="flex flex-col gap-1 float-left">
               <Button onClick={resetPositions}>
