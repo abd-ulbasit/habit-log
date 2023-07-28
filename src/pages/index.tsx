@@ -107,13 +107,13 @@ const Home: NextPageWithLayout = () => {
         <meta name="description" content="It's a habit builder/Tracker.It's inspired by the green github contribution graph." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={{ backgroundImage: `url(${bg.url})` }} className="bg-cover bg-center min-h-screen w-full  bg-gradient-to-b relative from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-hidden ">
-        <nav className="flex p-2 items-center justify-between fixed  w-full backdrop-blur-none bg-opacity-95 z-30">
+      <main style={{ backgroundImage: `url(${bg.url})` }} className="bg-cover bg-center min-h-screen w-full  bg-gradient-to-b relative from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-x-hidden overflow-y-scroll ">
+        <nav className="flex p-2 items-center justify-between fixed  w-full backdrop-blur-none bg-opacity-95 z-30 mb-8">
           <p>{status == "authenticated" ? `Welcome ${data?.user.name}` : "You are gay"}</p>
           <div className="flex gap-2">
             <Sheet>
-              <SheetTrigger className="block md:hidden"><MenuIcon></MenuIcon></SheetTrigger>
-              <SheetContent>
+              <SheetTrigger className="block lg:hidden"><MenuIcon></MenuIcon></SheetTrigger>
+              <SheetContent className="pt-12">
                 <SheetHeader>
                   <SheetDescription className="flex flex-col gap-2">
 
@@ -156,9 +156,8 @@ const Home: NextPageWithLayout = () => {
             <ModeToggle></ModeToggle>
             <Button onClick={handleLogin} >{status == "authenticated" ? "LogOut" : "Go to Login Page"}</Button>
           </div>
-
         </nav>
-        <div className="fixed top-16 left-2 flex flex-col gap-4 z-10 md:block hidden" >
+        <div className="fixed top-16 left-2 flex flex-col gap-4 z-10 lg:block hidden" >
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[5] ?? { x: 0, y: 0 }} >
             <div className="flex flex-col gap-1 float-left">
               <Button onClick={resetPositions}>
@@ -194,11 +193,19 @@ const Home: NextPageWithLayout = () => {
           </Select >
         </div>
         {/* <Image width={2500} height={1800} src={"/images/arabian_night.jpg"} alt="arabian_night"  ></Image> */}
-        <div className="grid fixed right-20 top-20 grid-cols-1 sm:grid-cols-2 gap-6" >
+        <div className="grid md:fixed md:right-20 md:top-20 grid-cols-1 sm:grid-cols-2 gap-6 relative pt-16 md:pt-0" >
+          {
+            visibleElements.includes(Elements.POMODORO) &&
+            <div className="self-center  mx-auto w-4/5 sm:w-auto " >
+              <Draggable resetPositions={resetPositions} initialPosition={initialPositions[0] ?? { x: 0, y: 0 }}  >
+                <Pomodoro ></Pomodoro>
+              </Draggable>
+            </div>
+          }
           {
 
             visibleElements.includes(Elements.TODO_LIST) &&
-            <div className="  " >
+            <div className=" mx-auto w-4/5 sm:w-auto " >
               <Draggable resetPositions={resetPositions} initialPosition={initialPositions[3] ?? {
                 x: 0, y: 0
               }} >
@@ -207,17 +214,9 @@ const Home: NextPageWithLayout = () => {
             </div>
           }
           {
-            visibleElements.includes(Elements.POMODORO) &&
-            <div className="" >
-              <Draggable resetPositions={resetPositions} initialPosition={initialPositions[0] ?? { x: 0, y: 0 }}  >
-                <Pomodoro ></Pomodoro>
-              </Draggable>
-            </div>
-          }
-          {
 
             visibleElements.includes(Elements.HABBIT_LIST) &&
-            <div className="ml-auto  float-right pr-4">
+            <div className="md:ml-auto  float-right pr-4  mx-auto w-4/5 sm:w-auto ">
 
               <Draggable resetPositions={resetPositions} initialPosition={initialPositions[1] ?? { x: 0, y: 0 }} >
                 <HabitList />
@@ -233,7 +232,7 @@ const Home: NextPageWithLayout = () => {
           }
         </div>
         {visibleElements.includes(Elements.YEAR_PROGRESS) &&
-          <div className="fixed bottom-2 left-2" >
+          <div className="sm:fixed sm:bottom-2 sm:left-2  relative " >
             <Draggable resetPositions={resetPositions} initialPosition={initialPositions[4] ?? { x: 0, y: 0 }} >
               <LastYearProgress></LastYearProgress>
             </Draggable>
