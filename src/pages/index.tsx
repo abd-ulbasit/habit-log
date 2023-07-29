@@ -90,6 +90,10 @@ const Home: NextPageWithLayout = () => {
     if (storedVisibleElements) {
       setVisibleElements(storedVisibleElements);
     }
+    const storedBg = JSON.parse(localStorage.getItem('bg') ?? '[]') as backGroundImage;
+    if (storedBg) {
+      setBg(storedBg);
+    }
   }, [])
   const resetPositions = () => {
     // Update the positions of all items to their initial positions
@@ -111,7 +115,7 @@ const Home: NextPageWithLayout = () => {
         <meta name="description" content="It's a habit builder/Tracker.It's inspired by the green github contribution graph." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={{ backgroundImage: `url(${bg.url})` }} className="bg-cover bg-center min-h-screen w-full  bg-gradient-to-b relative from-[#cab3eb] to-[#71afa7] dark:from-[#674f8a] dark:to-[#1e534c] select-none overflow-x-hidden overflow-y-scroll ">
+      <main style={{ backgroundImage: `url(${bg.url})` }} className="bg-cover bg-center min-h-screen w-full  bg-gradient-to-b relative  select-none overflow-x-hidden overflow-y-scroll ">
         <nav className="flex p-2 items-center justify-between fixed  w-full backdrop-blur-none bg-opacity-95 z-30 mb-8">
           <p>{status == "authenticated" ? `Welcome ${data?.user.name}` : "You are gay"}</p>
           <div className="flex gap-2">
@@ -140,7 +144,10 @@ const Home: NextPageWithLayout = () => {
                         ))
                       }
                     </div>
-                    <Select onValueChange={(e) => { setBg(allBackgrounds.find((bg) => bg.name == e)!) }}>
+                    <Select onValueChange={(e) => {
+                      const bg = allBackgrounds.find((bg) => bg.name == e)!;
+                      localStorage.setItem("bg", JSON.stringify(bg)); setBg(bg)
+                    }}>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Wallpaper" />
                       </SelectTrigger>
@@ -184,7 +191,10 @@ const Home: NextPageWithLayout = () => {
               }
             </div>
           </Draggable>
-          <Select onValueChange={(e) => { setBg(allBackgrounds.find((bg) => bg.name == e)!) }}>
+          <Select onValueChange={(e) => {
+            const bg = allBackgrounds.find((bg) => bg.name == e)!;
+            localStorage.setItem("bg", JSON.stringify(bg)); setBg(bg)
+          }}>
             <SelectTrigger className="w-[146px]">
               <SelectValue placeholder="Wallpaper" />
             </SelectTrigger>
