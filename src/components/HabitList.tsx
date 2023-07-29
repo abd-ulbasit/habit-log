@@ -53,7 +53,7 @@ const HabitList = () => {
         })
     }
     return (
-        <div className="list-disc ">
+        <div className="list-disc border rounded-lg p-4 flex gap-2 flex-col backdrop-blur-md">
             {
                 habits.data ? habits.data.filter((habit) => habit.name !== "POMODORO").map((habit) => {
                     const todayTracking = habit.Completed.find((t) => isDateToday(t.date))

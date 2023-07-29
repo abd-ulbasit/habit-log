@@ -117,10 +117,10 @@ const Home: NextPageWithLayout = () => {
       </Head>
       <main style={{ backgroundImage: `url(${bg.url})` }} className="bg-cover bg-center min-h-screen w-full  bg-gradient-to-b relative  select-none overflow-x-hidden overflow-y-scroll ">
         <nav className="flex p-2 items-center justify-between fixed  w-full backdrop-blur-none bg-opacity-95 z-30 mb-8">
-          <p>{status == "authenticated" ? `Welcome ${data?.user.name}` : "You are gay"}</p>
+          <p>{status == "authenticated" ? `Welcome ${data?.user.name}` : "Login for full access"}</p>
           <div className="flex gap-2">
             <Sheet>
-              <SheetTrigger className="block lg:hidden"><MenuIcon></MenuIcon></SheetTrigger>
+              <SheetTrigger className="block lg:hidden border px-2 rounded-md bg-primary text-secondary"><MenuIcon></MenuIcon></SheetTrigger>
               <SheetContent className="pt-12">
                 <SheetHeader>
                   <SheetDescription className="flex flex-col gap-2">
@@ -170,11 +170,11 @@ const Home: NextPageWithLayout = () => {
             <Button onClick={handleLogin} >{status == "authenticated" ? "LogOut" : "Go to Login Page"}</Button>
           </div>
         </nav>
-        <div className="fixed top-16 left-2 flex flex-col gap-4 z-10 lg:block hidden" >
+        <div className="fixed top-16 left-2 flex flex-col gap-4 z-10 lg:block hidden  p-2 " >
           <Draggable resetPositions={resetPositions} initialPosition={initialPositions[5] ?? { x: 0, y: 0 }} isDraggable={isDraggable}>
-            <div className="flex flex-col gap-1 float-left">
-              <Button onClick={() => setIsDraggable((prev) => !prev)} variant={'ghost'}>{isDraggable ? "Lock" : "Unlock"} Widgets</Button>
-              <Button onClick={resetPositions} variant={'ghost'} >
+            <div className="flex flex-col gap-1 float-left backdrop-blur-md pb-2 rounded-md ">
+              <Button onClick={() => setIsDraggable((prev) => !prev)} variant={'default'}>{isDraggable ? "Lock" : "Unlock"} Widgets</Button>
+              <Button onClick={resetPositions} variant={'default'} >
                 Reset
               </Button>
               {
@@ -195,15 +195,15 @@ const Home: NextPageWithLayout = () => {
             const bg = allBackgrounds.find((bg) => bg.name == e)!;
             localStorage.setItem("bg", JSON.stringify(bg)); setBg(bg)
           }}>
-            <SelectTrigger className="w-[146px]">
-              <SelectValue placeholder="Wallpaper" />
+            <SelectTrigger className="w-[136px] ">
+              <SelectValue placeholder="Wallpaper" className="text-sm" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent >
               <SelectGroup >
-                <SelectLabel>WallPapers</SelectLabel>
+                <SelectLabel className="text-sm" >WallPapers</SelectLabel>
                 {allBackgrounds.map((bg) => {
 
-                  return <SelectItem value={bg.name} key={bg.url}>{bg.name}</SelectItem>
+                  return <SelectItem value={bg.name} key={bg.url} className="text-sm">{bg.name}</SelectItem>
                 })}
               </SelectGroup>
             </SelectContent>

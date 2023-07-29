@@ -87,7 +87,7 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
     const MINIMUN_BREAK = 2
     const MINIMUM_WORK = 5
     return (
-        <div className='p-8 flex relative flex-col gap-4 border rounded-3xl shadow-lg sm:scale-110 w-4/5 self-center sm:w-auto'>
+        <div className='p-8 flex relative flex-col gap-4 backdrop-blur-md border rounded-3xl shadow-lg sm:scale-110 w-4/5 self-center sm:w-auto'>
 
             <p className='text-center uppercase inline'>{sessionType == SessionType.Break ? "Break" : "Work"}</p>
             <div className='fixed right-6 top-6' >

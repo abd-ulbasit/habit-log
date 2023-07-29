@@ -46,7 +46,7 @@ const TodoList: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 backdrop-blur">
             <form className="flex flex-row gap-2 w-full sm:w-80 self-center" onSubmit={handleAddTodo}>
                 <Input
                     className='flex-grow'
