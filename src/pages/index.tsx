@@ -4,7 +4,6 @@ import {
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "~/components/ui/sheet"
 
@@ -23,7 +22,7 @@ import { useRouter } from "next/router";
 
 import Head from "next/head";
 import type { NextPageWithLayout } from "./_app";
-import { useState, type ReactNode, useEffect } from "react";
+import { useState, useEffect } from "react";
 import CreateHabit from "~/components/CreateHabit";
 import HabitList from "~/components/HabitList";
 import LastYearProgress from "~/components/LastYearProgress";
@@ -34,9 +33,9 @@ import TodoList from "~/components/TodoList";
 import { MenuIcon } from "lucide-react";
 enum Elements {
   POMODORO = 'POMODORO',
-  HABBIT_LIST = 'HABBIT LIST',
   CREATE_HABIT = 'CREATE HABIT',
   TODO_LIST = 'TODO LIST',
+  HABBIT_LIST = 'HABBIT LIST',
   YEAR_PROGRESS = "PROGRESS"
 }
 interface backGroundImage {
@@ -123,9 +122,9 @@ const Home: NextPageWithLayout = () => {
               <SheetTrigger className="block lg:hidden border px-2 rounded-md bg-primary text-secondary"><MenuIcon></MenuIcon></SheetTrigger>
               <SheetContent className="pt-12">
                 <SheetHeader>
-                  <SheetDescription className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2">
 
-                    <div className="flex flex-col gap-1 float-left">
+                    <section className="flex flex-col gap-1 float-left">
                       <Button onClick={() => setIsDraggable((prev) => !prev)} variant={'ghost'}>{isDraggable ? "Lock" : "Unlock"} Widgets</Button>
                       <Button onClick={resetPositions} variant={'ghost'}>
                         Reset
@@ -136,14 +135,14 @@ const Home: NextPageWithLayout = () => {
                           <Button
                             key={element}
                             onClick={() => toggleElement(element)}
-
+                            className={status === "unauthenticated" && !['POMODORO', 'CREATE HABIT', 'TODO LIST'].includes(element) ? "hidden" : ""}
                             variant={visibleElements.includes(element) ? 'outline' : 'default'}
                           >
                             {element}
                           </Button>
                         ))
                       }
-                    </div>
+                    </section>
                     <Select onValueChange={(e) => {
                       const bg = allBackgrounds.find((bg) => bg.name == e)!;
                       localStorage.setItem("bg", JSON.stringify(bg)); setBg(bg)
@@ -162,7 +161,7 @@ const Home: NextPageWithLayout = () => {
                       </SelectContent>
                     </Select >
 
-                  </SheetDescription>
+                  </div>
                 </SheetHeader>
               </SheetContent>
             </Sheet>
@@ -182,7 +181,7 @@ const Home: NextPageWithLayout = () => {
                   <Button
                     key={element}
                     onClick={() => toggleElement(element)}
-
+                    className={status === "unauthenticated" && !['POMODORO', 'CREATE HABIT', 'TODO LIST'].includes(element) ? "hidden" : ""}
                     variant={visibleElements.includes(element) ? 'outline' : 'default'}
                   >
                     {element}
