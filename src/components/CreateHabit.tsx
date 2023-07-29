@@ -3,9 +3,10 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { api } from "~/utils/api";
-
+import { useSession } from "next-auth/react";
 
 export default function CreateHabit() {
+    const { status } = useSession()
     const trpcContext = api.useContext()
     const addHabit = api.habit.create.useMutation({
         onSuccess: async () => {
@@ -23,10 +24,13 @@ export default function CreateHabit() {
         if (!inputref.current?.value) {
             return;
         }
+        if (status === "unauthenticated") {
+            alert("You need to login first")
+            return;
+        }
         addHabit.mutate({
             name: inputref.current?.value
         })
-        console.log(inputref.current?.value);
     }
     return (
         <form onSubmit={handleCreateHabit} className=" p-2 rounded-md flex flex-col gap-2 mx-auto w-4/5 sm:w-auto pb-4 pr-0 md:pr-4 backdrop-blur-md">

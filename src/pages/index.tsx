@@ -111,7 +111,7 @@ const Home: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Task Manager</title>
+        <title>HabitLog</title>
         <meta name="description" content="It's a habit builder/Tracker.It's inspired by the green github contribution graph." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -239,7 +239,7 @@ const Home: NextPageWithLayout = () => {
           }
           {
 
-            visibleElements.includes(Elements.HABBIT_LIST) &&
+            visibleElements.includes(Elements.HABBIT_LIST) && status == "authenticated" &&
             <div className="md:ml-auto  float-right pr-4  mx-auto w-4/5 sm:w-auto ">
 
               <Draggable resetPositions={resetPositions} initialPosition={initialPositions[1] ?? { x: 0, y: 0 }} isDraggable={isDraggable}>
@@ -248,7 +248,7 @@ const Home: NextPageWithLayout = () => {
             </div>
           }
         </div>
-        {visibleElements.includes(Elements.YEAR_PROGRESS) &&
+        {visibleElements.includes(Elements.YEAR_PROGRESS) && status == "authenticated" &&
           <div className="sm:fixed sm:bottom-2 sm:left-2  relative w-4/5 mx-auto lg:w-auto self-center" >
             <Draggable resetPositions={resetPositions} initialPosition={initialPositions[4] ?? { x: 0, y: 0 }} isDraggable={isDraggable}>
               <LastYearProgress></LastYearProgress>
