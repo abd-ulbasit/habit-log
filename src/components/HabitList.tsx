@@ -54,6 +54,7 @@ const HabitList = () => {
     }
     return (
         <div className="list-disc border rounded-lg p-4 flex gap-2 flex-col backdrop-blur-md">
+            <p className="font-bold ">Things to follow</p>
             {
                 habits.data ? habits.data.filter((habit) => habit.name !== "POMODORO").map((habit) => {
                     const todayTracking = habit.Completed.find((t) => isDateToday(t.date))
@@ -62,7 +63,6 @@ const HabitList = () => {
                     }
                     return <li key={habit.id} className="flex items-center gap-2">
                         <Checkbox className="inline" onClick={() => handleMarkComplete(todayTracking.id)} checked={todayTracking.completed} disabled={updatetracking.status == "loading"} />
-                        <p className="inline">{habit.name}</p>
                         <AlertDialog>
                             <AlertDialogTrigger>
                                 <Trash2 />
@@ -81,6 +81,7 @@ const HabitList = () => {
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>
+                        <p className="inline">{habit.name}</p>
                     </li>
                 }) : null
             }
