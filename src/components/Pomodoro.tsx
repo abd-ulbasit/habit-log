@@ -13,6 +13,7 @@ import {
 } from "./ui/alert-dialog"
 import { Minus, Plus, Settings } from 'lucide-react';
 import { Input } from './ui/input';
+import { useSession } from 'next-auth/react';
 
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -26,6 +27,7 @@ enum SessionType {
 
 const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
     const addpomodoro = api.habit.addPomodoroSession.useMutation();
+    const { status } = useSession()
     const [workMin, setWorkMin] = useState<number>(20)
     const [breakMin, setBreakMin] = useState<number>(5)
     const [isRunning, setIsRunning] = useState(false);
@@ -66,7 +68,7 @@ const Pomodoro: React.FC<PomodoroProps> = ({ }) => {
 
     const handleCycleComplete = () => {
         setIsRunning(false);
-        if (sessionType == SessionType.WORK) {
+        if (sessionType == SessionType.WORK && status === "authenticated") {
             console.log("add to db");
             addpomodoro.mutate()
             //Store Session in db if logged in !
