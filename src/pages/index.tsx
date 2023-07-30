@@ -73,7 +73,7 @@ const Home: NextPageWithLayout = () => {
   const setHabits = useHabitStore(store => store.setHabits)
   const router = useRouter();
   const { status, data } = useSession();
-  const fetchHabitData = api.habit.getall.useQuery();
+  const fetchHabitData = api.habit.getall.useQuery(undefined, { enabled: status == "authenticated" })
   useEffect(() => {
     if (fetchHabitData.data) {
       setHabits(fetchHabitData.data)

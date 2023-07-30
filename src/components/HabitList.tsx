@@ -95,6 +95,7 @@ const HabitList = () => {
             {
                 habitData ? habitData.filter((habit) => habit.name !== "POMODORO").map((habit) => {
                     const todayTracking = habit.Completed.find((t) => isDateToday(t.date))
+                    // console.log(todayTracking)
                     if (!todayTracking) {
                         return
                     }
