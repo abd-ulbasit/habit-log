@@ -248,7 +248,7 @@ const Home: NextPageWithLayout = () => {
           }
         </div>
         {visibleElements.includes(Elements.YEAR_PROGRESS) && status == "authenticated" &&
-          <div className="sm:fixed sm:bottom-2 sm:left-2  relative w-4/5 mx-auto lg:w-auto self-center" >
+          <div className="sm:fixed sm:bottom-2 sm:left-2  relative  self-center" >
             <Draggable resetPositions={resetPositions} initialPosition={initialPositions[4] ?? { x: 0, y: 0 }} isDraggable={isDraggable}>
               <LastYearProgress></LastYearProgress>
             </Draggable>

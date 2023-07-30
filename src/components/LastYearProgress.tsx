@@ -88,48 +88,51 @@ const LastYearProgress = () => {
         }
     }, [scrollableref.current])
     return (
-        <TooltipProvider >
-            < div className="rounded-md grid grid-rows-7 grid-flow-col gap-1 overflow-scroll p-2 pb-4 backdrop-blur" ref={scrollableref}>
-                {dates.map((date) => {
-                    const dayTraking = allTracking?.filter((t) => areDatesSame(date, t.date));
-                    const count = dayTraking?.filter(t => t.completed == true).length ?? 0
-                    return <Tooltip key={date.toISOString()} >
-                        <TooltipTrigger className={`w-3 h-3 rounded-sm  ${getColor(count, highestCount, `green`)} `}></TooltipTrigger>
-                        <TooltipContent className="">{`${date.toDateString()} - ${count} points`}</TooltipContent>
-                    </Tooltip>
-                })
-                }
-            </div>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="outline">Filter</Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>Show Graph of:</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {gethabit.data?.map((habit) => {
-                        return (
+        <div className=" w-4/5 mx-auto lg:w-auto " >
 
-                            <DropdownMenuCheckboxItem
-                                checked={habitNames?.includes(habit.name)}
-                                onCheckedChange={() => {
-                                    console.log("flipped");
-                                    if (habitNames?.includes(habit.name)) {
-                                        setHabitNames((prev) => { return prev?.filter((x) => { return x != habit.name }) })
-                                    }
-                                    else {
-                                        setHabitNames((prev) => { return [...(prev ? prev : []), habit.name] as string[] })
-                                    }
-                                }}
-                                key={habit.id}
-                            >{habit.name}
-                            </DropdownMenuCheckboxItem>
-                        )
+            <TooltipProvider  >
+                < div className="rounded-md grid grid-rows-7 grid-flow-col gap-1 p-2 pb-4  backdrop-blur" ref={scrollableref}>
+                    {dates.map((date) => {
+                        const dayTraking = allTracking?.filter((t) => areDatesSame(date, t.date));
+                        const count = dayTraking?.filter(t => t.completed == true).length ?? 0
+                        return <Tooltip key={date.toISOString()} >
+                            <TooltipTrigger className={`w-3 h-3 rounded-sm  ${getColor(count, highestCount, `green`)} `}></TooltipTrigger>
+                            <TooltipContent  >{`${date.toDateString()} - ${count} points`}</TooltipContent>
+                        </Tooltip>
                     })
                     }
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </TooltipProvider >
+                </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline">Filter</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Show Graph of:</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {gethabit.data?.map((habit) => {
+                            return (
+
+                                <DropdownMenuCheckboxItem
+                                    checked={habitNames?.includes(habit.name)}
+                                    onCheckedChange={() => {
+                                        console.log("flipped");
+                                        if (habitNames?.includes(habit.name)) {
+                                            setHabitNames((prev) => { return prev?.filter((x) => { return x != habit.name }) })
+                                        }
+                                        else {
+                                            setHabitNames((prev) => { return [...(prev ? prev : []), habit.name] as string[] })
+                                        }
+                                    }}
+                                    key={habit.id}
+                                >{habit.name}
+                                </DropdownMenuCheckboxItem>
+                            )
+                        })
+                        }
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </TooltipProvider >
+        </div>
     );
 
 }
