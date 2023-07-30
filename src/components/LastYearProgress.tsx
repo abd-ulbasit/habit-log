@@ -49,6 +49,9 @@ const LastYearProgress = () => {
     useEffect(() => {
         setHabits(HabitsFromStore ? HabitsFromStore.filter((habit) => habitNames?.includes(habit.name)) as habit[] : [])
     }, [habitNames])
+    // useEffect(() => {
+    //     setHabitNames(habits?.map((habit) => habit.name))
+    // }, [habits])
     const allTracking = habits?.flatMap((habit) => habit.Completed)
     const completedCountByDay = new Map<string, number>();
 
@@ -115,7 +118,6 @@ const LastYearProgress = () => {
                                 <DropdownMenuCheckboxItem
                                     checked={habitNames?.includes(habit.name)}
                                     onCheckedChange={() => {
-                                        console.log("flipped");
                                         if (habitNames?.includes(habit.name)) {
                                             setHabitNames((prev) => { return prev?.filter((x) => { return x != habit.name }) })
                                         }
@@ -129,6 +131,15 @@ const LastYearProgress = () => {
                             )
                         })
                         }
+                        <DropdownMenuSeparator />
+                        <DropdownMenuCheckboxItem
+                            // checked={habitNames?.includes(habit.name)}
+                            checked={habitNames?.length == HabitsFromStore.length}
+                            onCheckedChange={() => {
+                                setHabitNames(HabitsFromStore.map((habit) => habit.name))
+                            }}
+                        >ShowAll
+                        </DropdownMenuCheckboxItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </TooltipProvider >
