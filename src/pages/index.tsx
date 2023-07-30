@@ -33,6 +33,7 @@ import TodoList from "~/components/TodoList";
 import { MenuIcon } from "lucide-react";
 import { api } from "~/utils/api";
 import { useHabitStore } from "~/stores/habitstore";
+import { allBackgrounds, type bgImageType } from "~/lib/wallpapers"
 enum Elements {
   POMODORO = 'POMODORO',
   CREATE_HABIT = 'CREATE HABIT',
@@ -40,35 +41,7 @@ enum Elements {
   HABBIT_LIST = 'HABBIT LIST',
   YEAR_PROGRESS = "PROGRESS"
 }
-interface backGroundImage {
-  name: string,
-  url: string
-}
 const NO_OF_DRAGGABLES = 6
-const allBackgrounds: backGroundImage[] = [{
-  name: "Arabian Night",
-  url: "/images/arabian_night.jpg"
-},
-{
-  name: "Lofi Boy",
-  url: "/images/lofi_boy.jpg"
-}
-  , {
-  name: "Lofi Girl",
-  url: "/images/lofi_girl.jpg"
-},
-{
-  name: "Lofi Cat",
-  url: "/images/lofi_cat.jpg"
-}
-  , {
-  name: "Lofi Night",
-  url: "/images/lofi_night.jpg"
-}, {
-  name: "None",
-  url: ""
-}
-]
 const Home: NextPageWithLayout = () => {
   const setHabits = useHabitStore(store => store.setHabits)
   const router = useRouter();
@@ -88,7 +61,7 @@ const Home: NextPageWithLayout = () => {
       void router.push("/login").then().catch()
     }
   }
-  const [bg, setBg] = useState<backGroundImage>(allBackgrounds[0]!)
+  const [bg, setBg] = useState<bgImageType>(allBackgrounds[0]!)
   const [visibleElements, setVisibleElements] = useState<string[]>(Object.values(Elements));
   const [initialPositions, setInitialPositions] = useState<{ x: number, y: number }[]>([]);
   const [isDraggable, setIsDraggable] = useState(true)
@@ -100,7 +73,7 @@ const Home: NextPageWithLayout = () => {
     if (storedVisibleElements) {
       setVisibleElements(storedVisibleElements);
     }
-    const storedBg = JSON.parse(localStorage.getItem('bg') ?? '[]') as backGroundImage;
+    const storedBg = JSON.parse(localStorage.getItem('bg') ?? '[]') as bgImageType;
     if (storedBg) {
       setBg(storedBg);
     }
