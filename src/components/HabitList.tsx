@@ -28,12 +28,12 @@ const HabitList = () => {
             await trpcCtx.habit.getall.invalidate()
         }
     })
-    const habits = api.habit.getall.useQuery();
-    useEffect(() => {
-        if (habits.data) {
-            setHabitData(habits.data)
-        }
-    }, [habits.data])
+    // const habits = api.habit.getall.useQuery();
+    // useEffect(() => {
+    //     if (habits.data) {
+    //         setHabitData(habits.data)
+    //     }
+    // }, [habits.data])
     const createTracking = api.habit.createTrcking.useMutation({
         onSuccess: async () => {
             await trpcCtx.habit.getall.invalidate()
@@ -51,9 +51,9 @@ const HabitList = () => {
                 createTracking.mutate({ habitId: habit.id })
             }
         }) : null;
-    }, [createTracking, habitData])
-    if (habits.isLoading) return <div>Loading...</div>
-    if (habits.error) return <div>{habits.error.message}</div>
+    }, [habitData])
+    // if (habits.isLoading) return <div>Loading...</div>
+    // if (habits.error) return <div>{habits.error.message}</div>
     const handleMarkComplete = (trackingId: string) => {
         // setHabitData((prev) => {
         //     return prev.map((habit) => {

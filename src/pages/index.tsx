@@ -31,6 +31,8 @@ import { Button } from "~/components/ui/button";
 import Pomodoro from "~/components/Pomodoro";
 import TodoList from "~/components/TodoList";
 import { MenuIcon } from "lucide-react";
+import { api } from "~/utils/api";
+import { useHabitStore } from "~/stores/habitstore";
 enum Elements {
   POMODORO = 'POMODORO',
   CREATE_HABIT = 'CREATE HABIT',
@@ -68,8 +70,17 @@ const allBackgrounds: backGroundImage[] = [{
 }
 ]
 const Home: NextPageWithLayout = () => {
+  const setHabits = useHabitStore(store => store.setHabits)
   const router = useRouter();
   const { status, data } = useSession();
+  const fetchHabitData = api.habit.getall.useQuery();
+  useEffect(() => {
+    if (fetchHabitData.data) {
+      setHabits(fetchHabitData.data)
+    }
+  }, [fetchHabitData.data])
+
+
   const handleLogin = () => {
     if (status == "authenticated") {
       void signOut().then().catch()

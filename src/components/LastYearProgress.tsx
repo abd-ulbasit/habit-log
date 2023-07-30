@@ -12,6 +12,7 @@ import type { Habit as HABIT, Tracking } from "@prisma/client";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { api } from "~/utils/api";
 import { areDatesSame } from "~/lib/utils";
+import { useHabitStore } from "~/stores/habitstore";
 function getColor(count: number, highestCount: number, _color: string): string {
     const x = count / highestCount;
     if (x == 0) {
@@ -37,17 +38,16 @@ const LastYearProgress = () => {
     const [habits, setHabits] = useState<habit[]>([])
     const [habitNames, setHabitNames] = useState<string[]>();
     const scrollableref = useRef<HTMLDivElement>(null)
-    const gethabit = api.habit.getall.useQuery();
-    if (gethabit.isFetching) {
-        <div>Loading</div>
-    }
+    // const gethabit = api.habit.getall.useQuery();
+    const HabitsFromStore = useHabitStore(store => store.habits)
+    // if (gethabit.isFetching) {
+    // <div>Loading</div>
+    // }
     useEffect(() => {
-        setHabits(() => {
-            return gethabit?.data ? gethabit.data : []
-        })
-    }, [gethabit.data])
+        setHabits(HabitsFromStore)
+    }, [HabitsFromStore])
     useEffect(() => {
-        setHabits(gethabit.data ? gethabit.data.filter((habit) => habitNames?.includes(habit.name)) as habit[] : [])
+        setHabits(HabitsFromStore ? HabitsFromStore.filter((habit) => habitNames?.includes(habit.name)) as habit[] : [])
     }, [habitNames])
     const allTracking = habits?.flatMap((habit) => habit.Completed)
     const completedCountByDay = new Map<string, number>();
@@ -109,7 +109,7 @@ const LastYearProgress = () => {
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Show Graph of:</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        {gethabit.data?.map((habit) => {
+                        {HabitsFromStore.map((habit) => {
                             return (
 
                                 <DropdownMenuCheckboxItem
