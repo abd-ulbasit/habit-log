@@ -6,9 +6,11 @@ import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 import { useRouter } from "next/router";
+import { useHabitStore } from "~/stores/habitstore";
 
 export default function CreateHabit() {
-    const { status } = useSession()
+    const addHabitToState = useHabitStore(state => state.addHabit)
+    const { status, data: SessionData } = useSession()
     const router = useRouter()
     const trpcContext = api.useContext()
     const addHabit = api.habit.create.useMutation({
@@ -27,6 +29,12 @@ export default function CreateHabit() {
         if (!inputref.current?.value) {
             return;
         }
+        addHabitToState({
+            name: inputref.current?.value,
+            userId: SessionData?.user?.id ?? "" as string,
+            id: "",
+            Completed: [{ id: "", date: new Date(), habitId: "", completed: false }]
+        })
         addHabit.mutate({
             name: inputref.current?.value
         })

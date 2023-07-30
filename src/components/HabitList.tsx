@@ -15,11 +15,13 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "./ui/alert-dialog"
+import { useHabitStore } from "~/stores/habitstore";
 interface HabitDataType extends Habit {
     Completed: Tracking[]
 }
 const HabitList = () => {
-    const [habitData, setHabitData] = useState<HabitDataType[]>([])
+    const [habitData, setHabitData, updateTrackingLocallay, removeHabit] = useHabitStore(state => [state.habits, state.setHabits, state.updateTracking, state.removeHabit])
+    // const [habitData, setHabitData] = useState<HabitDataType[]>([])
     const trpcCtx = api.useContext()
     const deleteHabit = api.habit.deleteHabit.useMutation({
         onSuccess: async () => {
@@ -53,35 +55,36 @@ const HabitList = () => {
     if (habits.isLoading) return <div>Loading...</div>
     if (habits.error) return <div>{habits.error.message}</div>
     const handleMarkComplete = (trackingId: string) => {
-        setHabitData((prev) => {
-            return prev.map((habit) => {
-                const todayTracking = habit.Completed.find((t) => isDateToday(t.date))
-                if (todayTracking?.id === trackingId) {
-                    return {
-                        ...habit,
-                        Completed: habit.Completed.map((t) => {
-                            if (t.id === trackingId) {
-                                return {
-                                    ...t,
-                                    completed: !t.completed
-                                }
-                            }
-                            return t
-                        })
-                    }
-                }
-                return habit
-            })
-        })
+        // setHabitData((prev) => {
+        //     return prev.map((habit) => {
+        //         const todayTracking = habit.Completed.find((t) => isDateToday(t.date))
+        //         if (todayTracking?.id === trackingId) {
+        //             return {
+        //                 ...habit,
+        //                 Completed: habit.Completed.map((t) => {
+        //                     if (t.id === trackingId) {
+        //                         return {
+        //                             ...t,
+        //                             completed: !t.completed
+        //                         }
+        //                     }
+        //                     return t
+        //                 })
+        //             }
+        //         }
+        //         return habit
+        //     })
+        // })
+        updateTrackingLocallay(trackingId)
 
         // console.log(trackingId, );
         updatetracking.mutate({ id: trackingId })
     }
     const handleDeleteHabit = (id: string) => {
-        setHabitData((prev) => {
-            return prev.filter((habit) => habit.id !== id)
-        })
-
+        // setHabitData((prev) => {
+        //     return prev.filter((habit) => habit.id !== id)
+        // })
+        removeHabit(id)
         deleteHabit.mutate({
             id
         })
